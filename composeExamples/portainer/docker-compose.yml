@@ -1,0 +1,73 @@
+# docker stack deploy --compose-file=docker-compose.yml cassandra
+version: '3.1'
+
+services:
+  cassandra-1:
+    image: cassandra:3.11.2
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+        window: 120s
+    # In case this is the first time starting up cassandra we need to ensure
+    # that all nodes do not start up at the same time. Cassandra has a
+    # 2 minute rule i.e. 2 minutes between each node boot up. Booting up
+    # nodes simultaneously is a mistake. This only needs to happen the firt
+    # time we bootup. Configuration below assumes if the Cassandra data
+    # directory is empty it means that we are starting up for the first
+    # time.
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
+    environment:
+      CASSANDRA_BROADCAST_ADDRESS: cassandra-1
+    ports:
+    - "7000"
+
+  cassandra-2:
+    image: cassandra:3.11.2
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+        window: 120s
+    # In case this is the first time starting up cassandra we need to ensure
+    # that all nodes do not start up at the same time. Cassandra has a
+    # 2 minute rule i.e. 2 minutes between each node boot up. Booting up
+    # nodes simultaneously is a mistake. This only needs to happen the firt
+    # time we bootup. Configuration below assumes if the Cassandra data
+    # directory is empty it means that we are starting up for the first
+    # time.
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 120; fi && /docker-entrypoint.sh cassandra -f'
+    environment:
+      CASSANDRA_BROADCAST_ADDRESS: cassandra-2
+      CASSANDRA_SEEDS: cassandra-1
+    depends_on:
+      - cassandra-1
+    ports:
+    - "7000"
+
+  cassandra-3:
+    image: cassandra:3.11.2
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+        window: 120s
+    # In case this is the first time starting up cassandra we need to ensure
+    # that all nodes do not start up at the same time. Cassandra has a
+    # 2 minute rule i.e. 2 minutes between each node boot up. Booting up
+    # nodes simultaneously is a mistake. This only needs to happen the firt
+    # time we bootup. Configuration below assumes if the Cassandra data
+    # directory is empty it means that we are starting up for the first
+    # time.
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 240; fi && /docker-entrypoint.sh cassandra -f'
+    environment:
+      CASSANDRA_BROADCAST_ADDRESS: cassandra-3
+      CASSANDRA_SEEDS: cassandra-1
+    depends_on:
+      - cassandra-2
+    ports:
+    - "7000"
+
+
+
+
