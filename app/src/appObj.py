@@ -6,12 +6,17 @@
 
 from baseapp_for_restapi_backend_with_swagger import appObj
 from flask_restplus import fields
+from cassandraDatastore import cassandraDatastoreClass
+from appParams import appParamsClass
 
 class appObjClass(appObj):
-  jobExecutor = None
+  appParams = None
+  datastore = None
 
   def init(self, env, testingMode = False):
     super(appObjClass, self).init(env)
+    appPArams = appParamsClass(env)
+    datastore = cassandraDatastoreClass('todoENVNAME','todoIPList',9000)
 
 
   def initOnce(self):
