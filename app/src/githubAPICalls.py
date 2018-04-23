@@ -37,7 +37,7 @@ class githubAPICallsClass():
       results.append(curEBODir['name'])
     return results
     
-  def getEBOInfoFileFromMaster(self, EBOName):
+  def getEBOInfoFileFromGit(self, EBOName, Tag):
     #r = self.c_get('/contents/EBOs/' + EBOName + '/info.json', [200])
     #resultJSON = json.loads(r.text)
     #results = []
@@ -45,7 +45,7 @@ class githubAPICallsClass():
     #Correct way to do it is to get download_url as above but I am limited to 60 calls per hour so it is better to caculate
     ## Example: https://raw.githubusercontent.com/rmetcalf9/dockPondSampleEBOs/master/EBOs/Animals/info.json
     ## API Location Example: https://api.github.com/repos/rmetcalf9/dockPondSampleEBOs
-    fileURL = self.apiURL.replace('api.github.com/repos','raw.githubusercontent.com') + '/master/EBOs/' + EBOName + '/info.json'
+    fileURL = self.apiURL.replace('api.github.com/repos','raw.githubusercontent.com') + '/' + Tag + '/EBOs/' + EBOName + '/info.json'
     with urllib.request.urlopen(fileURL) as url:
       filll = json.loads(url.read().decode())
-    print(data)
+    return filll

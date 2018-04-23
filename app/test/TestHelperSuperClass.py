@@ -61,8 +61,10 @@ class testHelperAPIClient(testHelperSuperClass):
   testClient = None
 
   def setUp(self):
-    # curDatetime = datetime.datetime.now(pytz.utc)
-    # for testing always pretend the server started at a set datetime
+    pass
+
+  #moved to a manual call so I can inject and stop call to hithub api
+  def setUpMAN(self):
     appObj.init(env, testingMode = True)
     self.testClient = appObj.flaskAppObject.test_client()
     self.testClient.testing = True 

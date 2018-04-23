@@ -3,12 +3,14 @@ from githubAPICalls import githubAPICallsClass
 
 #Class to represent loaded EBOs
 class eboEndpointManagerClass():
+  appObj = None
   githubAPICalls = None
 
   loadedEBOs = None #Dict of eboEndpoint objects
   
   def __init__(self, appObj):
     self.loadedEBOs = dict()
+    self.appObj = appObj
     self.githubAPICalls = githubAPICallsClass(appObj)
 
 
@@ -25,7 +27,7 @@ class eboEndpointManagerClass():
         self.loadedEBOs[gitEBO].updateScanGIT()
         self.loadedEBOs[gitEBO].setupAPI() #Will remove API if EBO is not in OK state
       else:
-        newEBO = eboEndpointClass(gitEBO, self.githubAPICalls)
+        newEBO = eboEndpointClass(gitEBO, self.githubAPICalls, self.appObj)
         newEBO.firstScanGIT()
         newEBO.setupAPI()
         self.loadedEBOs.append(gitEBO) #appended to list whatever state is

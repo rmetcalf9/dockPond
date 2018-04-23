@@ -3,6 +3,7 @@
 #Class to represent an endpoint for an EBO
 class eboEndpointClass():
   githubAPICalls = None
+  appObj = None
 
   state = 'Uninstalised'
   stateMeanings = {
@@ -19,8 +20,9 @@ class eboEndpointClass():
   eboName = None
   errorStateReason = None
 
-  def __init__(self, eboName, githubAPICalls):
+  def __init__(self, eboName, githubAPICalls, appObj):
     self.githubAPICalls = githubAPICalls
+    self.appObj = appObj
     self.state = 'Uninstalised'
     self.eboName = eboName
     if not self._isValidName:
@@ -43,37 +45,37 @@ class eboEndpointClass():
     self.errorStateReason = 'Not found in latest git scan'
 
   def _getInfo(self):
-    return self.githubAPICalls.getEBOInfoFileFromMaster(self.eboName)
-    
-  def firstScanGIT(self):
+    return self.githubAPICalls.getEBOInfoFileFromGit(self.eboName, 'master')
+  
+  def _scanGIT(self, noDepState):
     try:
       self.state = 'Initial Scanning'
       info = self._getInfo()
-      raise Exception('Not Implemented')
+      tagForDeployment = None
+      for depEnv in info['Deployments']:
+        if depEnv == self.appObj.appParams.APIAPP_ENVIROMENT:
+          tagForDeployment = info['Deployments'][depEnv]
+      if tagForDeployment is None:
+        self.state = noDepState
+        return
+      raise Exception('Not Implemented Deploy tag ' + tagForDeployment)
     except Exception as e:
       self.setToErrorState(str(e))
       raise #TODO Change back to return
       #return
     self.state = 'OK'
+  
+  def firstScanGIT(self):
+    self._scanGIT(noDepState='Not deployed in this Instance')
 
   def updateScanGIT(self):
-    try:
-      self.state = 'Scanning'
-      raise Exception('Not Implemented')
-    except Exception as e:
-      self.setToErrorState(str(e))
-      removeAPI()
-      return
-    self.state = 'OK'
+    self._scanGIT(noDepState='Vanished')
 
   def setupAPI(self):
     if self.state != 'OK':
-      self._removeAPI()
+      #self._removeAPI() We will never remove an API that is present
       return
     raise Exception('Not Implemented')
     
-  # may be called if API is not setup
-  def _removeAPI(self):
-    raise Exception('Not Implemented')
 
 
