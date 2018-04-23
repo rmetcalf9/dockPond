@@ -24,12 +24,13 @@ class datastoreClass():
     raise self.datastoreNotOveriddenException
 
   #Called once to init each object type
-  # this is called when duckPond recognises then eed for the type
+  # this is called when duckPond recognises the need for the type
   # may be called mutiple times
   def initObjectType(self, objectTypeName):
     raise self.datastoreNotOveriddenException
 
   #function to create new instance of obj or update it's data
+  # objData is a DICT that is converted to JSON string for storing in DB
   def upsert(self, objectTypeName, objKey, objData):
     raise self.datastoreNotOveriddenException
 

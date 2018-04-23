@@ -19,8 +19,11 @@ class appObjClass(appObj):
     self.datastore = cassandraDatastoreClass(self.appParams.APIAPP_ENVIROMENT,env)
     
     print('Starting dockPond')
+    print ('\nDuckPond vars:')
     self.appParams.printVarValues()
+    print ('\nDatastore vars:')
     self.datastore.printVarValues()
+    print ('\nMain vars:')
     
     self.datastore.initStore()
 

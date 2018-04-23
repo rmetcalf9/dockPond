@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#Note the following command can start a local cassandra database:
+#docker run --name cassandraDB -d -p 7000:7000 -p 9042:9042 cassandra:3
+
+
 APP_DIR=.
 
 export APIAPP_PORT=3033
@@ -11,7 +15,8 @@ export APIAPP_APIACCESSSECURITY=[]
 
 export APIAPP_ENVIROMENT=DEV
 export APIAPP_CASS_IPLIST="[ 'localhost' ]"
-export APIAPP_CASS_PORT="9000"
+export APIAPP_CASS_PORT="9042"
+export APIAPP_CASS_REPLICATION="{ 'class': 'SimpleStrategy', 'replication_factor': '1' }"
 
 
 export APIAPP_VERSION=

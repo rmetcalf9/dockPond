@@ -16,9 +16,10 @@ env = {
   'APIAPP_FRONTEND': '../app',
   'APIAPP_APIURL': 'http://apiurlxxx',
   'APIAPP_APIACCESSSECURITY': '[{ "type": "basic-auth" }]',
-  'APIAPP_ENVIROMENT': 'DEV',
-  'APIAPP_CASS_PORT': '9000',
-  'APIAPP_CASS_IPLIST': '[ "1.2.3.4", "4.3.2.1"]'
+  'APIAPP_ENVIROMENT': 'DEV_INT_TEST',
+  'APIAPP_CASS_PORT': '9042',
+  'APIAPP_CASS_IPLIST': '[ "localhost"]',
+  'APIAPP_CASS_REPLICATION': '{ \'class\': \'SimpleStrategy\', \'replication_factor\': \'1\' }'
 }
 
 class testHelperSuperClass(unittest.TestCase):

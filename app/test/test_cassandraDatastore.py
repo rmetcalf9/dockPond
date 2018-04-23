@@ -7,8 +7,9 @@ import json
 from baseapp_for_restapi_backend_with_swagger import getInvalidEnvVarParamaterException
 
 workingenv = {
-  'APIAPP_CASS_PORT': '9000',
-  'APIAPP_CASS_IPLIST': '[ "1.2.3.4", "4.3.2.1"]'
+  'APIAPP_CASS_PORT': '9042',
+  'APIAPP_CASS_IPLIST': '[ "localhost"]',
+  'APIAPP_CASS_REPLICATION': "{ 'class': 'SimpleStrategy', 'replication_factor': '1' }"
 }
 
 class test_appCassandraDatastoreClass(testHelperSuperClass):
@@ -35,5 +36,4 @@ class test_appCassandraDatastoreClass(testHelperSuperClass):
     with self.assertRaises(Exception) as context:
       x = cassandraDatastoreClass('DEV',invalidenv)
     self.checkGotRightException(context,getInvalidEnvVarParamaterException('APIAPP_CASS_IPLIST'))
-
 
