@@ -22,10 +22,12 @@ class eboEndpointManagerClass():
     
     for gitEBO in gitEBOs:
       if gitEBO in self.loadedEBOs:
-        self.loadedEBOs[gitEBO].scanGITandRegisterAPI()
+        self.loadedEBOs[gitEBO].updateScanGIT()
+        self.loadedEBOs[gitEBO].setupAPI() #Will remove API if EBO is not in OK state
       else:
-        newEBO = eboEndpointClass(gitEBO)
-        newEBO.scanGITandRegisterAPI()
-        self.loadedEBOs.append(gitEBO)
+        newEBO = eboEndpointClass(gitEBO, self.githubAPICalls)
+        newEBO.firstScanGIT()
+        newEBO.setupAPI()
+        self.loadedEBOs.append(gitEBO) #appended to list whatever state is
 
 

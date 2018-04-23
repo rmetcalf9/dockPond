@@ -1,6 +1,6 @@
 import requests
 import json
-
+import urllib
 
 
 class githubAPICallsClass():
@@ -30,9 +30,22 @@ class githubAPICallsClass():
     raise Exception('Unexpected response from post:' + api + ' (' + str(r.status_code) + ')')
     
   def getEBOList(self):
-    r = self.c_get('/contents/EBOs', [200])
+    r = self.c_get('/contents/EBOs/', [200])
     resultJSON = json.loads(r.text)
     results = []
     for curEBODir in resultJSON:
       results.append(curEBODir['name'])
     return results
+    
+  def getEBOInfoFileFromMaster(self, EBOName):
+    #r = self.c_get('/contents/EBOs/' + EBOName + '/info.json', [200])
+    #resultJSON = json.loads(r.text)
+    #results = []
+    #print(resultJSON['download_url'])
+    #Correct way to do it is to get download_url as above but I am limited to 60 calls per hour so it is better to caculate
+    ## Example: https://raw.githubusercontent.com/rmetcalf9/dockPondSampleEBOs/master/EBOs/Animals/info.json
+    ## API Location Example: https://api.github.com/repos/rmetcalf9/dockPondSampleEBOs
+    fileURL = self.apiURL.replace('api.github.com/repos','raw.githubusercontent.com') + '/master/EBOs/' + EBOName + '/info.json'
+    with urllib.request.urlopen(fileURL) as url:
+      filll = json.loads(url.read().decode())
+    print(data)

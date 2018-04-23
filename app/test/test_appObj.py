@@ -4,10 +4,13 @@ from appObj import appObj, appObjClass
 import pytz
 import datetime
 import json
+from unittest.mock import patch, call
 
 class test_appObjClass(testHelperAPIClient):
 #Actual tests below
 
+  
+  @patch('githubAPICalls.githubAPICallsClass.getEBOList', return_value=[ 'Animals' ])
   def test_CreateAppOBjInstance(self):
     pass
 
