@@ -15,7 +15,10 @@ env = {
   'APIAPP_VERSION': 'TEST-3.3.3',
   'APIAPP_FRONTEND': '../app',
   'APIAPP_APIURL': 'http://apiurlxxx',
-  'APIAPP_APIACCESSSECURITY': '[{ "type": "basic-auth" }]'
+  'APIAPP_APIACCESSSECURITY': '[{ "type": "basic-auth" }]',
+  'APIAPP_ENVIROMENT': 'DEV',
+  'APIAPP_CASS_PORT': '9000',
+  'APIAPP_CASS_IPLIST': '[ "1.2.3.4", "4.3.2.1"]'
 }
 
 class testHelperSuperClass(unittest.TestCase):

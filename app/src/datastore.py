@@ -8,10 +8,15 @@ class datastoreClass():
   datastoreNotOveriddenException = Exception("Function not implemented for this datastre type")
   enviromentName = 'NULL' #String representing the enviroment name e.g. Dev, Test, Prod.
 
+  # Should evaluate paramaters but not do any db connections
   def __init__(self,typeName, enviromentName):
     self.typeName = typeName
     self.datastoreNotOveriddenException =  Exception("Function not implemented for " + self.typeName + " type")
     self.enviromentName = enviromentName
+
+  # Called when starting to output values
+  def printVarValues(self):
+    raise self.datastoreNotOveriddenException
 
   #called when the application is initially started
   # all inits may be called when the store is already instalised

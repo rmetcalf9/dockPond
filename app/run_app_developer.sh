@@ -2,11 +2,16 @@
 
 APP_DIR=.
 
+export APIAPP_PORT=3033
 export APIAPP_MODE=DEVELOPER
 export APIAPP_FRONTEND=_
 export APIAPP_APIURL=http://localhost/api
 export APIAPP_APIDOCSURL=http://localhost/apidocs/
 export APIAPP_APIACCESSSECURITY=[]
+
+export APIAPP_ENVIROMENT=DEV
+export APIAPP_CASS_IPLIST="[ 'localhost' ]"
+export APIAPP_CASS_PORT="9000"
 
 
 export APIAPP_VERSION=

@@ -6,7 +6,7 @@
 
 from baseapp_for_restapi_backend_with_swagger import appObj
 from flask_restplus import fields
-from cassandraDatastore import cassandraDatastoreClass
+from cassandraDatastore import name as cassandraDatastoreName, datastoreClass as cassandraDatastoreClass
 from appParams import appParamsClass
 
 class appObjClass(appObj):
@@ -15,8 +15,14 @@ class appObjClass(appObj):
 
   def init(self, env, testingMode = False):
     super(appObjClass, self).init(env)
-    appPArams = appParamsClass(env)
-    datastore = cassandraDatastoreClass('todoENVNAME','todoIPList',9000)
+    self.appParams = appParamsClass(env)
+    self.datastore = cassandraDatastoreClass(self.appParams.APIAPP_ENVIROMENT,env)
+    
+    print('Starting dockPond')
+    self.appParams.printVarValues()
+    self.datastore.printVarValues()
+    
+    self.datastore.initStore()
 
 
   def initOnce(self):
@@ -24,7 +30,6 @@ class appObjClass(appObj):
 
   #override exit gracefully to stop worker thread
   def exit_gracefully(self, signum, frame):
-    self.stopThread()
     super(appObjClass, self).exit_gracefully(signum, frame)
 
 appObj = appObjClass()
