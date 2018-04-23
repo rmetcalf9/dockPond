@@ -8,10 +8,12 @@ from baseapp_for_restapi_backend_with_swagger import appObj
 from flask_restplus import fields
 from cassandraDatastore import name as cassandraDatastoreName, datastoreClass as cassandraDatastoreClass
 from appParams import appParamsClass
+from eboEndpointManager import eboEndpointManagerClass
 
 class appObjClass(appObj):
   appParams = None
   datastore = None
+  eboEndpointManager = None
 
   def init(self, env, testingMode = False):
     super(appObjClass, self).init(env)
@@ -27,6 +29,8 @@ class appObjClass(appObj):
     
     self.datastore.initStore()
 
+    self.eboEndpointManager = eboEndpointManagerClass(self)
+    self.eboEndpointManager.scanGitandLoadEBOs()
 
   def initOnce(self):
     super(appObjClass, self).initOnce()

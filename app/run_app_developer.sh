@@ -17,7 +17,7 @@ export APIAPP_ENVIROMENT=DEV
 export APIAPP_CASS_IPLIST="[ 'localhost' ]"
 export APIAPP_CASS_PORT="9042"
 export APIAPP_CASS_REPLICATION="{ 'class': 'SimpleStrategy', 'replication_factor': '1' }"
-
+export APIAPP_GITHUBREPOLOCATION="https://api.github.com/repos/rmetcalf9/dockPondSampleEBOs"
 
 export APIAPP_VERSION=
 if [ -f ${APP_DIR}/../VERSION ]; then
