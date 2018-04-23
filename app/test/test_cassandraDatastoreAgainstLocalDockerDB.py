@@ -16,6 +16,8 @@ workingenv = {
 }
 
 class test_appCassandraDatastoreClass(testHelperSuperClass):
+
+
 #Actual tests below
 
   def test_initCreateObj(self):
@@ -57,4 +59,16 @@ class test_appCassandraDatastoreClass(testHelperSuperClass):
     self.assertEqual(curRow.id,tstDataID)
     self.assertJSONStringsEqual(json.loads(curRow.jsonstr),tstData,msg='Different Data Returned')
     session.shutdown()
+
+  def test_initQueryBackSingleItemObj(self):
+    tstType = "Animals3"
+    tstDataID = 'ABC'
+    tstData = { 'ID': tstDataID, 'Name': 'Don\'t know' }
+
+    dataStore = cassandraDatastoreClass('DEVTST_UNT',workingenv)
+    dataStore.initStore()
+    dataStore.initObjectType(tstType)
+    dataStore.upsert(tstType, tstDataID, tstData)
+    dataVal = dataStore.query(tstType, tstDataID)
+    self.assertJSONStringsEqual(dataVal,tstData,msg='Different Data Returned')
 

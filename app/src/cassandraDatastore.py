@@ -70,15 +70,31 @@ class datastoreClass(datastore.datastoreClass):
     #session = self.cluster.connect(self.keyspace())
     
     session = self.cluster.connect()
-    cql = 'CREATE TABLE IF NOT EXISTS ' + self.keyspace() + '.' + objectTypeName + ' ( id text, jsonSTR text, PRIMARY KEY (id) )'
+    cql = 'CREATE TABLE IF NOT EXISTS ' + self.keyspace() + '.' + objectTypeName + ' ( id text, jsonstr text, PRIMARY KEY (id) )'
     # print(cql)
     session.execute(cql)
     session.shutdown()
 
   def upsert(self, objectTypeName, objKey, objData):
     session = self.cluster.connect()
-    cql = 'INSERT INTO ' + self.keyspace() + '.' + objectTypeName + ' (id, jsonSTR) VALUES ( %s, %s)'
+    cql = 'INSERT INTO ' + self.keyspace() + '.' + objectTypeName + ' (id, jsonstr) VALUES ( %s, %s)'
     # print(cql)
     session.execute(cql, (objKey, json.dumps(objData)))
     session.shutdown()
+
+  def query(self, objectTypeName, objKey):
+    session = self.cluster.connect()
+    cql = 'select * from ' + self.keyspace() + '.' + objectTypeName + ' WHERE ID=\'' + objKey + '\''
+    rows = session.execute(cql)
+    if rows.has_more_pages:
+      raise Exception('More than one page of objects with this key returned')
+    c = 0
+    for curRow in rows:
+      c = c + 1
+    if c > 1:
+      raise Exception('More than one object with this key returned')
+    return json.loads(curRow.jsonstr)
+
+  def delete(self, objectTypeName, objKey):
+    raise Exception('TODO')
 
