@@ -72,3 +72,21 @@ class test_appCassandraDatastoreClass(testHelperSuperClass):
     dataVal = dataStore.query(tstType, tstDataID)
     self.assertJSONStringsEqual(dataVal,tstData,msg='Different Data Returned')
 
+  def test_DeleteSingleItemObj(self):
+    tstType = "Animals4"
+    tstDataID = 'ABC'
+    tstData = { 'ID': tstDataID, 'Name': 'Don\'t know' }
+
+    dataStore = cassandraDatastoreClass('DEVTST_UNT',workingenv)
+    dataStore.initStore()
+    dataStore.initObjectType(tstType)
+    dataStore.upsert(tstType, tstDataID, tstData)
+    dataVal = dataStore.query(tstType, tstDataID)
+    self.assertJSONStringsEqual(dataVal,tstData,msg='Different Data Returned')
+    deletedVal = dataStore.delete(tstType, tstDataID)
+    self.assertJSONStringsEqual(deletedVal,tstData,msg='Different Data Returned from delete function')
+    with self.assertRaises(Exception) as context:
+      dataVal = dataStore.query(tstType, tstDataID)
+    self.checkGotRightException(context,dataStore.objectNotFoundException)
+
+

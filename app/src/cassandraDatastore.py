@@ -18,6 +18,8 @@ class datastoreClass(datastore.datastoreClass):
   
   cluster = None
   
+  objectNotFoundException = Exception("Object not found")
+  
   def keyspace(self):
     return self.keyspace_prefix + self.enviromentName
 
@@ -82,8 +84,11 @@ class datastoreClass(datastore.datastoreClass):
     session.execute(cql, (objKey, json.dumps(objData)))
     session.shutdown()
 
-  def query(self, objectTypeName, objKey):
-    session = self.cluster.connect()
+  def query(self, objectTypeName, objKey, session=None):
+    sessionCreated = False
+    if session is None:
+      sessionCreated = True
+      session = self.cluster.connect()
     cql = 'select * from ' + self.keyspace() + '.' + objectTypeName + ' WHERE ID=\'' + objKey + '\''
     rows = session.execute(cql)
     if rows.has_more_pages:
@@ -93,8 +98,19 @@ class datastoreClass(datastore.datastoreClass):
       c = c + 1
     if c > 1:
       raise Exception('More than one object with this key returned')
-    return json.loads(curRow.jsonstr)
+    if c == 0:
+      raise self.objectNotFoundException
+    retVal = json.loads(curRow.jsonstr)
+    if sessionCreated:
+      session.shutdown()
+    return retVal
 
   def delete(self, objectTypeName, objKey):
-    raise Exception('TODO')
+    session = self.cluster.connect()
+    #Take a copy of the data so we can return it once we have deleted it
+    dataToDelete = self.query(objectTypeName, objKey, session)
+    cql = 'delete from ' + self.keyspace() + '.' + objectTypeName + ' WHERE ID=\'' + objKey + '\''
+    session.execute(cql)
+    session.shutdown()
+    return dataToDelete
 

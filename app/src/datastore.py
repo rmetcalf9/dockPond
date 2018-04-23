@@ -38,6 +38,7 @@ class datastoreClass():
     raise self.datastoreNotOveriddenException
 
   #function to take the objKey and return the data
+  # return None if object is not found
   def query(self, objectTypeName, objKey):
     raise self.datastoreNotOveriddenException
 
