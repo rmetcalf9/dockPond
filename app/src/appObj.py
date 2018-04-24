@@ -9,6 +9,7 @@ from flask_restplus import fields
 from cassandraDatastore import name as cassandraDatastoreName, datastoreClass as cassandraDatastoreClass
 from appParams import appParamsClass
 from eboEndpointManager import eboEndpointManagerClass
+from mainAPI import registerAPI as registerMainApi
 
 class appObjClass(appObj):
   appParams = None
@@ -34,6 +35,9 @@ class appObjClass(appObj):
 
   def initOnce(self):
     super(appObjClass, self).initOnce()
+    
+    #Regiest main api
+    registerMainApi(self)
 
   #override exit gracefully to stop worker thread
   def exit_gracefully(self, signum, frame):

@@ -30,6 +30,6 @@ class eboEndpointManagerClass():
         newEBO = eboEndpointClass(gitEBO, self.githubAPICalls, self.appObj)
         newEBO.firstScanGIT()
         newEBO.setupAPI()
-        self.loadedEBOs.append(gitEBO) #appended to list whatever state is
+        self.loadedEBOs[newEBO.eboName] = newEBO #appended to list whatever state is
 
 

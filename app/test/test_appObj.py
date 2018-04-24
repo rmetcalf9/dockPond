@@ -10,7 +10,7 @@ class test_appObjClass(testHelperAPIClient):
 #Actual tests below
 
   
-  @patch('githubAPICalls.githubAPICallsClass.getEBOList', return_value=[ 'Animals', 'Bands', 'Towns' ])
+  @patch('githubAPICalls.githubAPICallsClass.getEBOList', return_value=[ 'AnimalsV1', 'BandsV1', 'TownsV1' ])
   def test_CreateAppOBjInstance(self, getEBOListCall):
     self.setUpMAN()
 

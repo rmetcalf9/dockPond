@@ -23,14 +23,14 @@ class test_appCassandraDatastoreClass(testHelperSuperClass):
   def test_initCreateObj(self):
     dataStore = cassandraDatastoreClass('DEVTST_UNT',workingenv)
     dataStore.initStore()
-    dataStore.initObjectType("Animals")
+    dataStore.initObjectType("AnimalsV1")
 
     #Check table was created
     cluster = Cluster(eval(workingenv['APIAPP_CASS_IPLIST']), port=int(workingenv['APIAPP_CASS_PORT']))
     session = cluster.connect()
     cql = 'USE ' + dataStore.keyspace()
     session.execute(cql)
-    cql = 'select * from Animals WHERE ID=\'ABC\''
+    cql = 'select * from AnimalsV1 WHERE ID=\'ABC\''
     res = session.execute(cql)
     session.shutdown()
 

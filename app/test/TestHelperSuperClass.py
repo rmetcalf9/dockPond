@@ -22,6 +22,9 @@ env = {
   'APIAPP_CASS_REPLICATION': '{ \'class\': \'SimpleStrategy\', \'replication_factor\': \'1\' }',
   'APIAPP_GITHUBREPOLOCATION': 'https://api.github.com/repos/rmetcalf9/dockPondSampleEBOs'
 }
+#If 403s get returned check
+# https://api.github.com/repos/rmetcalf9/dockPondSampleEBOs/rate_limit
+# https://api.github.com/rate_limit
 
 class testHelperSuperClass(unittest.TestCase):
   def checkGotRightException(self, context, ExpectedException):

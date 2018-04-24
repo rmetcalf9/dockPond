@@ -36,8 +36,8 @@ class githubAPICallsClass():
     for curEBODir in resultJSON:
       results.append(curEBODir['name'])
     return results
-    
-  def getEBOInfoFileFromGit(self, EBOName, Tag):
+  
+  def _getFileFromGit(self, EBOName, Tag, FileName):  
     #r = self.c_get('/contents/EBOs/' + EBOName + '/info.json', [200])
     #resultJSON = json.loads(r.text)
     #results = []
@@ -45,7 +45,14 @@ class githubAPICallsClass():
     #Correct way to do it is to get download_url as above but I am limited to 60 calls per hour so it is better to caculate
     ## Example: https://raw.githubusercontent.com/rmetcalf9/dockPondSampleEBOs/master/EBOs/Animals/info.json
     ## API Location Example: https://api.github.com/repos/rmetcalf9/dockPondSampleEBOs
-    fileURL = self.apiURL.replace('api.github.com/repos','raw.githubusercontent.com') + '/' + Tag + '/EBOs/' + EBOName + '/info.json'
+    fileURL = self.apiURL.replace('api.github.com/repos','raw.githubusercontent.com') + '/' + Tag + '/EBOs/' + EBOName + '/' + FileName
+    # print(fileURL)
     with urllib.request.urlopen(fileURL) as url:
-      filll = json.loads(url.read().decode())
+      filll = url.read().decode()
     return filll
+  
+  def getEBOInfoFileFromGit(self, EBOName, Tag):
+    return self._getFileFromGit(EBOName, Tag, 'info.json')
+    
+  def getPythonModelFileFromGit(self, EBOName, Tag):
+    return self._getFileFromGit(EBOName, Tag, 'model.py')
