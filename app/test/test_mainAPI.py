@@ -9,25 +9,25 @@ class test_mainAPI(testHelperAPIClient):
   def test_getEBOs(self, getEBOListCall):
     self.setUpMAN()
     expRes = {
-      'Jobs': {
-        'NextJobsToExecute': [],
-        'TotalJobs': 0,
-        'JobsNeverRun': 0,
-        'JobsCompletingSucessfully': 0,
-        'JobsLastExecutionFailed': 0
-      },
-      'Server': {
-        'DefaultUserTimezone': 'Europe/London', 
-        'ServerDatetime': 'IGNORE',
-        'ServerStartupTime': '2018-01-01T13:46:00+00:00',
-        'TotalJobExecutions': 0
-      },
-    }
+      "pagination": {
+        "offset": 0, "pagesize": 100, "total": 3
+       }, 
+       "result": [
+        {"name": "TownsV1"}, {"name": "AnimalsV1"}, {"name": "BandsV1"}
+       ]
+      }
     result = self.testClient.get('/api/EBOs/')
     self.assertEqual(result.status_code, 200)
     resultJSON = json.loads(result.get_data(as_text=True))
-    resultJSON['Server']['ServerDatetime'] = 'IGNORE'
-    self.assertJSONStringsEqual(resultJSON, expRes)
+    self.assertJSONStringsEqual(resultJSON['pagination'], expRes['pagination'], msg="Pagination part wrong")
+    matchedARR = list(expRes['result'])
+    numMatched = 0
+    for expIdx, expVal in enumerate(resultJSON['result']):
+      for idx, val in enumerate(matchedARR):
+        if self.areJSONStringsEqual(val,expVal):
+          matchedARR[idx] = '_'
+          numMatched = numMatched + 1
+    self.assertEqual(len(matchedARR),numMatched,msg='Didn\'t match all results')
 
   @patch('githubAPICalls.githubAPICallsClass.getEBOList', return_value=[ 'AnimalsV1', 'BandsV1', 'TownsV1' ])
   def test_swaggerJSONProperlyShared(self, getEBOListCall):
