@@ -12,6 +12,8 @@ export APIAPP_FRONTEND=_
 export APIAPP_APIURL=http://localhost/api
 export APIAPP_APIDOCSURL=http://localhost/apidocs/
 export APIAPP_APIACCESSSECURITY=[]
+export APIAPP_EBOAPIURL=http://localhost/ebos
+export APIAPP_EBOAPIDOCSURL=http://localhost/ebodocs/
 
 export APIAPP_ENVIROMENT=DEV
 export APIAPP_CASS_IPLIST="[ 'localhost' ]"

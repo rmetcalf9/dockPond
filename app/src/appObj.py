@@ -11,7 +11,52 @@ from appParams import appParamsClass
 from eboEndpointManager import eboEndpointManagerClass
 from mainAPI import registerAPI as registerMainApi
 
-class appObjClass(appObj):
+#Test code to use local flaskbaseapp
+##START DEL
+from flask import Flask, Blueprint
+from FlaskRestSubclass import FlaskRestSubclass
+#from baseapp_for_restapi_backend_with_swagger import FlaskRestSubclass
+import signal
+class tmp(appObj):
+  def initOnce(self):
+    self.flaskAppObject = Flask(__name__)
+
+    #Development code required to add CORS allowance in developer mode
+    @self.flaskAppObject.after_request
+    def after_request(response):
+      if (self.globalParamObject.getDeveloperMode()):
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+      return response
+
+    api_blueprint = Blueprint('api', __name__)
+    self.flastRestPlusAPIObject = FlaskRestSubclass(api_blueprint, 
+      version='UNSET', 
+      title='DocJob Scheduling Server API',
+      description='API for the DockJob scheduling server', 
+      doc='/apidocs/',
+      default_mediatype='application/json'
+    )
+    self.flastRestPlusAPIObject.setExtraParams(
+      self.globalParamObject.apidocsurl, 
+      self.globalParamObject.getAPIDOCSPath(), 
+      self.globalParamObject.overrideAPIDOCSPath, 
+      self.globalParamObject.getAPIPath()
+    )
+
+    self.flastRestPlusAPIObject.init_app(api_blueprint)  
+
+    self.flaskAppObject.register_blueprint(api_blueprint, url_prefix='/api')
+    
+    ##registerWebFrontendAPI(self) Not needed in this test
+    ###self.flaskAppObject.register_blueprint(webfrontendBP, url_prefix='/frontend')
+    
+    signal.signal(signal.SIGINT, self.exit_gracefully)
+    signal.signal(signal.SIGTERM, self.exit_gracefully) #sigterm is sent by docker stop command
+##END DEL
+
+class appObjClass(tmp):
   appParams = None
   datastore = None
   eboEndpointManager = None
@@ -38,6 +83,8 @@ class appObjClass(appObj):
     
     #Regiest main api
     registerMainApi(self)
+    
+
 
   #override exit gracefully to stop worker thread
   def exit_gracefully(self, signum, frame):

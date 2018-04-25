@@ -8,6 +8,9 @@ import os
 ## /apidocs    API Documentation including swagger.json and swaggerUI
 ## /frontend   Frontend for this application
 ##
+## for EBOs:
+## /ebos/AnimalsV1/
+## /ebodocs/AnimalsV1/
 
 appObj.init(os.environ)
 

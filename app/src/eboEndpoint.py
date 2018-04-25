@@ -3,6 +3,8 @@ import json
 #Required for get Model execution
 from flask_restplus import fields
 
+from apiEndpoint import apiEndpointClass
+
 def getGetModelFunctionFromPythonFile(pythonFile):
   ldict = locals()
   exec(pythonFile, None,ldict)
@@ -41,6 +43,7 @@ class eboEndpointClass():
   
   loadedModel = None
   loadedModelTag = None
+  loadedAPI = None
   loadedAPITag = None
 
   def __init__(self, eboName, githubAPICalls, appObj):
@@ -117,11 +120,16 @@ class eboEndpointClass():
 
   def _setupAPI(self):
     try:
-      raise Exception('_setupAPI Not Implemented')
+      if self.loadedAPI is not None:
+        self.loadedAPI.unload()
+        self.loadedAPI = None
+        self.loadedAPITag = None
+      self.loadedAPI = apiEndpointClass(self)
+      self.loadedAPITag = self.loadedModelTag
     except Exception as e:
       self.setToErrorState(str(e))
-      ##raise #Used to display errors
-      return
+      raise #Used to display errors
+      ##return
     self.state = 'OK'
   
   def setupAPI(self):
