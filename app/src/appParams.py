@@ -8,6 +8,15 @@ class appParamsClass():
   APIAPP_EBOAPIURL = None
   APIAPP_EBOAPIDOCSURL = None
 
+  def ensureNotTerminatedWithASlash(self, val, param):
+    if len(val)==0:
+      return
+    if val[-1:] != '/':
+      if val[-1:] != '\\':
+        return
+    raise getInvalidEnvVarParamaterException(param, actualValue=val, messageOverride='Should not end with a slash')
+    
+  
   def __init__(self, env):
     self.APIAPP_ENVIROMENT = readFromEnviroment(env, 'APIAPP_ENVIROMENT', None, None)
     if len(self.APIAPP_ENVIROMENT) < 2:
@@ -17,6 +26,8 @@ class appParamsClass():
     self.APIAPP_EBOAPIURL = readFromEnviroment(env, 'APIAPP_EBOAPIURL', None, None)
     self.APIAPP_EBOAPIDOCSURL = readFromEnviroment(env, 'APIAPP_EBOAPIDOCSURL', None, None)
 
+    self.ensureNotTerminatedWithASlash(self.APIAPP_EBOAPIURL, 'APIAPP_EBOAPIURL')
+    self.ensureNotTerminatedWithASlash(self.APIAPP_EBOAPIDOCSURL, 'APIAPP_EBOAPIDOCSURL')
 
   def printVarValues(self):
     print('APIAPP_ENVIROMENT=' + str(self.APIAPP_ENVIROMENT))

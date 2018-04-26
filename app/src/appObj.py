@@ -4,7 +4,7 @@
 #All times will be passed to callers in UTC
 # it is up to the callers to convert into any desired user timezone
 
-from baseapp_for_restapi_backend_with_swagger import appObj
+from baseapp_for_restapi_backend_with_swagger import appObj as parAppObj
 from flask_restplus import fields
 from cassandraDatastore import name as cassandraDatastoreName, datastoreClass as cassandraDatastoreClass
 from appParams import appParamsClass
@@ -17,9 +17,17 @@ from flask import Flask, Blueprint
 from FlaskRestSubclass import FlaskRestSubclass
 #from baseapp_for_restapi_backend_with_swagger import FlaskRestSubclass
 import signal
-class tmp(appObj):
+class tmp(parAppObj):
+  def init(self, env, testingMode = False):
+    print('DUMMY TMP INIT')
+    super(tmp, self).init(env)
+
   def initOnce(self):
     self.flaskAppObject = Flask(__name__)
+    print('DUMMY APP OBJ USING INTERNAL FLASKRESTSUBCLASS')
+    print('DUMMY APP OBJ USING INTERNAL FLASKRESTSUBCLASS')
+    print('DUMMY APP OBJ USING INTERNAL FLASKRESTSUBCLASS')
+    print('DUMMY APP OBJ USING INTERNAL FLASKRESTSUBCLASS')
 
     #Development code required to add CORS allowance in developer mode
     @self.flaskAppObject.after_request
@@ -60,9 +68,13 @@ class appObjClass(tmp):
   appParams = None
   datastore = None
   eboEndpointManager = None
+  
+  testingMode = False
 
   def init(self, env, testingMode = False):
     super(appObjClass, self).init(env)
+    self.testingMode = testingMode #Causes APIs to only register if they are not already registered
+    
     self.appParams = appParamsClass(env)
     self.datastore = cassandraDatastoreClass(self.appParams.APIAPP_ENVIROMENT,env)
     

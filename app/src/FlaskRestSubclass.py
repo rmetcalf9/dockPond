@@ -93,15 +93,20 @@ class FlaskRestSubclass(Api):
       pass
 
   def _register_specs(self, app_or_blueprint):
+    #Seems to be called twice. I don't know why
     pass
       
   def _register_apidoc(self, app):
+    app_or_blueprint = self.blueprint or app
     conf = app.extensions.setdefault('restplus', {})
     configParamVal = 'apidoc_registered_' + self._doc
     if not conf.get(configParamVal, False):
       locToRegister = removeTrailingSlash(self._doc)
       self.localApiDoc.add_url_rule('/swagger.json', 'spec', self.getSwaggerJSON) #Register / will become /apidocs/swagger.json
       self.localApiDoc.add_url_rule('/', 'doc', self.render_doc)  #Register / will become /apidocs/
+      
+      app_or_blueprint.add_url_rule('/swagger.json', 'spec_api', self.getSwaggerJSON) #Register / will become /apis/swagger.json
+      print('RRR')
       
       app.register_blueprint(self.localApiDoc, url_prefix=locToRegister)
       

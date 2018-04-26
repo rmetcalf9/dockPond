@@ -28,14 +28,8 @@ class test_mainAPI(testHelperAPIClient):
           matchedARR[idx] = '_'
           numMatched = numMatched + 1
     self.assertEqual(len(matchedARR),numMatched,msg='Didn\'t match all results')
-
-  @patch('githubAPICalls.githubAPICallsClass.getEBOList', return_value=[ 'AnimalsV1', 'BandsV1', 'TownsV1' ])
-  def test_swaggerJSONProperlyShared(self, getEBOListCall):
-    self.setUpMAN()
-    result = self.testClient.get('/api/swagger.json')
-    self.assertEqual(result.status_code, 200)
-    result = self.testClient.get('/apidocs/swagger.json')
-    self.assertEqual(result.status_code, 200)
+    
+  #Swagger files tested in appObj
 
 
 

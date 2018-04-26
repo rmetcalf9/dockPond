@@ -11,11 +11,15 @@ from baseapp_for_restapi_backend_with_swagger import from_iso8601
 
 
 env = {
+  'APIAPP_PORT': '3033',
   'APIAPP_MODE': 'DOCKER',
   'APIAPP_VERSION': 'TEST-3.3.3',
   'APIAPP_FRONTEND': '../app',
-  'APIAPP_APIURL': 'http://apiurlxxx',
+  'APIAPP_APIURL': 'http://localhost:3033/api',
+  'APIAPP_APIDOCSURL': 'http://localhost:3033/apidocs',
   'APIAPP_APIACCESSSECURITY': '[{ "type": "basic-auth" }]',
+  'APIAPP_EBOAPIURL': 'http://localhost:3033/ebos',
+  'APIAPP_EBOAPIDOCSURL': 'http://localhost:3033/ebodocs',
   'APIAPP_ENVIROMENT': 'DEV_INT_TEST',
   'APIAPP_CASS_PORT': '9042',
   'APIAPP_CASS_IPLIST': '[ "localhost"]',

@@ -48,14 +48,19 @@ class apiEndpointClass():
     )
     self.flastRestPlusAPIObject.init_app(api_blueprint) 
     
-    self.eboEndpoint.appObj.flaskAppObject.register_blueprint(api_blueprint, url_prefix=self.APILocation)
+    try:
+      self.eboEndpoint.appObj.flaskAppObject.register_blueprint(api_blueprint, url_prefix=self.APILocation)
+    except:
+      if not self.eboEndpoint.appObj.testingMode:
+        raise
+      print('Testing mode - ignoring mutiple register call for ' + self.eboEndpoint.eboName + ' EBO')
     
     self._registerAPI(self.eboEndpoint.appObj)
     
-    #print("*********DEBUG RULE START*************")
-    #for rule in self.eboEndpoint.appObj.flaskAppObject.url_map.iter_rules():
-    #  print(rule)
-    #print("*********DEBUG RULE END*************")
+    print("*********DEBUG RULE START*************")
+    for rule in self.eboEndpoint.appObj.flaskAppObject.url_map.iter_rules():
+      print(rule)
+    print("*********DEBUG RULE END*************")
 
     #raise Exception('API Endpoint init not implemented')
     
