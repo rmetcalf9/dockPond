@@ -9,11 +9,20 @@ from flask import request
 import datetime
 import pytz
 
+from flask_restplus import fields
+
+def getGetModelFunctionFromPythonFile(pythonFile):
+  ldict = locals()
+  exec(pythonFile, None,ldict)
+  return ldict['getModel']
+
 class apiEndpointClass():
   eboEndpoint = None
   flastRestPlusAPIObject = None
   docAPILocation = None
   APILocation = None
+
+  EBOModel = None
 
   def __init__(self, eboEndpoint):
     self.eboEndpoint = eboEndpoint
@@ -54,6 +63,13 @@ class apiEndpointClass():
         raise
       print('Testing mode - ignoring mutiple register call for ' + self.eboEndpoint.eboName + ' EBO')
     
+    getModelFN = getGetModelFunctionFromPythonFile(self.eboEndpoint.pythonFile)
+    if getModelFN is None:
+      raise Exception('Failed to load model - (getModel = None)')
+
+    self.EBOModel = getModelFN(self.flastRestPlusAPIObject)
+    print('BB')
+
     self._registerAPI(self.eboEndpoint.appObj)
     
     #print("*********DEBUG RULE START*************")
@@ -67,9 +83,9 @@ class apiEndpointClass():
     class EBOsList(Resource):
       '''Lists EBO Items'''
 
-      @namespace.doc('getjobs')
-      #@namespace.marshal_with(appObj.getResultModel(self.eboEndpoint.loadedModel))
-      @appObj.flastRestPlusAPIObject.response(200, 'Success')
+      @namespace.doc('getlist')
+      @namespace.marshal_with(appObj.getForiegnResultModel(self.EBOModel, self.flastRestPlusAPIObject))
+      @self.flastRestPlusAPIObject.response(200, 'Success')
       @appObj.addStandardSortParams(namespace)
       def get(self):
         '''Get EBOs'''

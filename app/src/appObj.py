@@ -49,5 +49,19 @@ class appObjClass(parAppObj):
   def exit_gracefully(self, signum, frame):
     super(appObjClass, self).exit_gracefully(signum, frame)
 
+  #Get a result model but for a different flaskRestPLus API
+  # todo move this into base app
+  def getForiegnResultModel(self, recordModel, restPlusAPI):
+    paginationModel = restPlusAPI.model('paginationList', {
+      'offset': fields.Integer(default='0',description='Number to start from'),
+      'pagesize': fields.Integer(default='',description='Results per page'),
+      'total': fields.Integer(default='0',description='Total number of records in output')
+    })
+    return restPlusAPI.model('resultList', {
+      'pagination': fields.Nested(paginationModel),
+      'result': fields.List(fields.Nested(recordModel)),
+    })
+
+
 appObj = appObjClass()
 

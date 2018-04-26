@@ -41,8 +41,8 @@ class eboEndpointClass():
   eboName = None
   errorStateReason = None
   
-  loadedModel = None
-  loadedModelTag = None
+  pythonFile = None
+  pythonFileTag = None
   loadedAPI = None
   loadedAPITag = None
 
@@ -79,16 +79,12 @@ class eboEndpointClass():
     return json.loads(self.githubAPICalls.getEBOInfoFileFromGit(self.eboName, 'master'))
   
   # Called by scanGIT - dosen't need to change state
-  def _loadModel(self, tagName):
+  def _loadModelFN(self, tagName):
     pythonFile = self.githubAPICalls.getPythonModelFileFromGit(self.eboName, tagName)
-    getModel = getGetModelFunctionFromPythonFile(pythonFile)
-    if getModel is None:
-      raise Exception('Failed to load model - (getModel = None)')
-    model = getModel(self.appObj)
     
     #Last statements so not run if execption has occured
-    self.loadedModel = model
-    self.loadedModelTag = tagName
+    self.pythonFile = pythonFile
+    self.pythonFileTag = tagName
   
   def _scanGIT(self, noDepState, finishLoadState):
     try:
@@ -101,9 +97,9 @@ class eboEndpointClass():
       if tagGitSaysWeShouldBeRunning is None:
         self.state = noDepState
         return
-      if self.loadedModelTag != tagGitSaysWeShouldBeRunning:
-        self._loadModel(tagGitSaysWeShouldBeRunning)
-        if self.loadedModelTag == tagGitSaysWeShouldBeRunning:
+      if self.pythonFileTag != tagGitSaysWeShouldBeRunning:
+        self._loadModelFN(tagGitSaysWeShouldBeRunning)
+        if self.pythonFileTag == tagGitSaysWeShouldBeRunning:
           self.state = finishLoadState
         return
     except Exception as e:
@@ -125,7 +121,7 @@ class eboEndpointClass():
         self.loadedAPI = None
         self.loadedAPITag = None
       self.loadedAPI = apiEndpointClass(self)
-      self.loadedAPITag = self.loadedModelTag
+      self.loadedAPITag = self.pythonFileTag
     except Exception as e:
       self.setToErrorState(str(e))
       raise #Used to display errors
