@@ -1,8 +1,7 @@
 # Class to represent an API endpoint
 #  it is used by eboEndpoint for registering the Flask API's
 
-#from baseapp_for_restapi_backend_with_swagger import FlaskRestSubclass
-from FlaskRestSubclass import FlaskRestSubclass
+from baseapp_for_restapi_backend_with_swagger import FlaskRestSubclass
 
 from flask import Blueprint
 from flask_restplus import Resource
@@ -57,12 +56,10 @@ class apiEndpointClass():
     
     self._registerAPI(self.eboEndpoint.appObj)
     
-    print("*********DEBUG RULE START*************")
-    for rule in self.eboEndpoint.appObj.flaskAppObject.url_map.iter_rules():
-      print(rule)
-    print("*********DEBUG RULE END*************")
-
-    #raise Exception('API Endpoint init not implemented')
+    #print("*********DEBUG RULE START*************")
+    #for rule in self.eboEndpoint.appObj.flaskAppObject.url_map.iter_rules():
+    #  print(rule)
+    #print("*********DEBUG RULE END*************")
     
   def _registerAPI(self, appObj):
     namespace = self.flastRestPlusAPIObject.namespace('EBO', description='CRUD API\'s for EBO')
