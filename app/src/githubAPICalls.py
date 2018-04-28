@@ -47,8 +47,11 @@ class githubAPICallsClass():
     ## API Location Example: https://api.github.com/repos/rmetcalf9/dockPondSampleEBOs
     fileURL = self.apiURL.replace('api.github.com/repos','raw.githubusercontent.com') + '/' + Tag + '/EBOs/' + EBOName + '/' + FileName
     # print(fileURL)
-    with urllib.request.urlopen(fileURL) as url:
-      filll = url.read().decode()
+    try:
+      with urllib.request.urlopen(fileURL) as url:
+        filll = url.read().decode()
+    except Exception as e:
+      raise Exception("Failed to load from " + fileURL + " - " + str(e))
     return filll
   
   def getEBOInfoFileFromGit(self, EBOName, Tag):

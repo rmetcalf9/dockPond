@@ -15,7 +15,9 @@ class eboEndpointManagerClass():
 
 
   def scanGitandLoadEBOs(self):
+    print("Querying github for EBO List...", end='')
     gitEBOs = self.githubAPICalls.getEBOList()
+    print("Found " + str(len(gitEBOs)) + " EBOs")
     
     #Mark vanished
     for loadedEBO in self.loadedEBOs:

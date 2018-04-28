@@ -13,7 +13,12 @@ def getGetModelFunctionFromPythonFile(pythonFile):
 def getEBOModel(appObj):
   # used to describe GET /EBOs query result record
   return appObj.flastRestPlusAPIObject.model('EBO', {
-    'name': fields.String(default='',description='Name of this EBO')
+    'name': fields.String(default='',description='Name of this EBO'),
+    'state': fields.String(default='',description='State'),
+    'stateMeaning': fields.String(default='',description='Text description of state meaning'),
+    'sourceFileTag': fields.String(default='',description='Github tag for source file of the EBO'),
+    'loadedAPITag': fields.String(default='',description='Github tag for loaded API'),
+    'errorStateReason': fields.String(default='',description='Error details for any error encountered when setting up the API for this EBO')
   })
 
   
@@ -60,6 +65,12 @@ class eboEndpointClass():
   def getDictForQueryMustMatchModel(self):
     ret = dict()
     ret['name'] = self.eboName
+    ret['state'] = self.state
+    ret['stateMeaning'] = self.stateMeanings[self.state]
+    ret['loadedAPITag'] = self.loadedAPITag
+    ret['sourceFileTag'] = self.pythonFileTag
+    ret['errorStateReason'] = self.errorStateReason
+
     return ret
     
   #Make sure name read from git is a valid name for an EBO

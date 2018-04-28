@@ -33,7 +33,7 @@ class appParamsClass():
     print('APIAPP_ENVIROMENT=' + str(self.APIAPP_ENVIROMENT))
     print('APIAPP_EBOAPIURL=' + str(self.APIAPP_EBOAPIURL))
     print('APIAPP_EBOAPIDOCSURL=' + str(self.APIAPP_EBOAPIDOCSURL))
-
+    print('APIAPP_GITHUBREPOLOCATION=' + str(self.APIAPP_GITHUBREPOLOCATION))
 
     
   def getEBOHost(self):
