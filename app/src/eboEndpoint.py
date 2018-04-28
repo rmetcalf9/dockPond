@@ -73,7 +73,7 @@ class eboEndpointClass():
     ret['loadedAPITag'] = self.loadedAPITag
     ret['sourceFileTag'] = self.pythonFileTag
     ret['errorStateReason'] = self.errorStateReason
-    ret['apiurl'] = self.appObj.appParams.APIAPP_EBOAPIURL + '/' + self.eboName + '/'
+    ret['apiurl'] = self.appObj.appParams.APIAPP_EBOAPIURL + '/' + self.eboName + '/EBO/'
     ret['apidocurl'] = self.appObj.appParams.APIAPP_EBOAPIDOCSURL + '/' + self.eboName + '/'
     ret['swaggerurl'] = self.appObj.appParams.APIAPP_EBOAPIURL + '/' + self.eboName + '/swagger.json' #Give out API location
 
