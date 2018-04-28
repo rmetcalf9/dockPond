@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 
 const state = {
   ebos: {
-    visibleColumns: ['name', 'loadedAPITag', 'state', 'apidocs'],
+    visibleColumns: ['name', 'loadedAPITag', 'state', 'apidocurl'],
     serverPagination: {
       page: 1,
       rowsNumber: 10, // specifying this determines pagination is server-side

@@ -18,7 +18,10 @@ def getEBOModel(appObj):
     'stateMeaning': fields.String(default='',description='Text description of state meaning'),
     'sourceFileTag': fields.String(default='',description='Github tag for source file of the EBO'),
     'loadedAPITag': fields.String(default='',description='Github tag for loaded API'),
-    'errorStateReason': fields.String(default='',description='Error details for any error encountered when setting up the API for this EBO')
+    'errorStateReason': fields.String(default='',description='Error details for any error encountered when setting up the API for this EBO'),
+    'apiurl': fields.String(default='',description='URL for api'),
+    'apidocurl': fields.String(default='',description='URL for api documentation'),
+    'swaggerurl': fields.String(default='',description='URL for swagger.json file')
   })
 
   
@@ -70,6 +73,9 @@ class eboEndpointClass():
     ret['loadedAPITag'] = self.loadedAPITag
     ret['sourceFileTag'] = self.pythonFileTag
     ret['errorStateReason'] = self.errorStateReason
+    ret['apiurl'] = self.appObj.appParams.APIAPP_EBOAPIURL + '/' + self.eboName + '/'
+    ret['apidocurl'] = self.appObj.appParams.APIAPP_EBOAPIDOCSURL + '/' + self.eboName + '/'
+    ret['swaggerurl'] = self.appObj.appParams.APIAPP_EBOAPIURL + '/' + self.eboName + '/swagger.json' #Give out API location
 
     return ret
     

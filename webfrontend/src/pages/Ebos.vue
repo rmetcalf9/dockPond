@@ -28,8 +28,14 @@
       <!--<q-search clearable hide-underline v-model="ebosDataTableSettings.filter" />-->
       </template>
 
-      <q-td slot="body-cell-apidocs" slot-scope="props" :props="props">
-        <div v-if="props.row.state === 'OK' ">{{ props.apidocurl }}</div>
+      <q-td slot="body-cell-apiurl" slot-scope="props" :props="props">
+        <div v-if="props.row.state === 'OK' "><a v-bind:href="props.row.apiurl" target="_blank">{{ props.row.apiurl }}</a></div>
+      </q-td>
+      <q-td slot="body-cell-apidocurl" slot-scope="props" :props="props">
+        <div v-if="props.row.state === 'OK' "><a v-bind:href="props.row.apidocurl" target="_blank">{{ props.row.apidocurl }}</a></div>
+      </q-td>
+      <q-td slot="body-cell-swaggerurl" slot-scope="props" :props="props">
+        <div v-if="props.row.state === 'OK' "><a v-bind:href="props.row.swaggerurl" target="_blank">{{ props.row.swaggerurl }}</a></div>
       </q-td>
 
     </q-table>
@@ -61,7 +67,9 @@ export default {
         { name: 'state', required: false, label: 'State', align: 'left', field: 'state', sortable: false, filter: false },
         { name: 'stateMeaning', required: false, label: 'State Meaning', align: 'left', field: 'stateMeaning', sortable: false, filter: false },
         { name: 'errorStateReason', required: false, label: 'Error', align: 'left', field: 'errorStateReason', sortable: false, filter: false },
-        { name: 'apidocs', required: false, label: 'API Documentation', align: 'left', field: 'apidocs', sortable: false, filter: false }
+        { name: 'apiurl', required: false, label: 'API URL', align: 'left', field: 'apiurl', sortable: false, filter: false },
+        { name: 'apidocurl', required: false, label: 'API Documentation', align: 'left', field: 'apidocurl', sortable: false, filter: false },
+        { name: 'swaggerurl', required: false, label: 'Swagger file', align: 'left', field: 'swaggerurl', sortable: false, filter: false }
       ],
       eboData: [],
       loading: false
