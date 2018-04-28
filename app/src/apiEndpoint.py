@@ -9,6 +9,8 @@ from flask import request
 import datetime
 import pytz
 
+from werkzeug.exceptions import BadRequest
+
 from flask_restplus import fields
 
 def getGetModelFunctionFromPythonFile(pythonFile):
@@ -68,8 +70,8 @@ class apiEndpointClass():
       raise Exception('Failed to load model - (getModel = None)')
 
     self.EBOModel = getModelFN(self.flastRestPlusAPIObject)
-    print('BB')
 
+    self.eboEndpoint.appObj.datastore.initObjectType(self.eboEndpoint.eboName)
     self._registerAPI(self.eboEndpoint.appObj)
     
     #print("*********DEBUG RULE START*************")
@@ -78,6 +80,8 @@ class apiEndpointClass():
     #print("*********DEBUG RULE END*************")
     
   def _registerAPI(self, appObj):
+    datastore = appObj.datastore
+    objectTypeName = self.eboEndpoint.eboName
     namespace = self.flastRestPlusAPIObject.namespace('EBO', description='CRUD API\'s for EBO')
     @namespace.route('/')
     class EBOsList(Resource):
@@ -90,21 +94,71 @@ class apiEndpointClass():
       def get(self):
         '''Get EBOs'''
         def outputEBO(item):
-          return item.getDictForQueryMustMatchModel()
-        def filterEBO(item, whereClauseText): #if multiple separated by spaces each is passed individually and anded together
-          #if appObj.appData['jobsData'].jobs[item].name.upper().find(whereClauseText) != -1:
-          #  return True
-          #if appObj.appData['jobsData'].jobs[item].command.upper().find(whereClauseText) != -1:
-          #  return True
-          #return False
+          return item
+        def filterEBO(item, whereClauseText): #Queries must be implemented by datastore
           return True
+
+        offset = request.args.get('offset')
+        if offset is None:
+          offset = 0
+        else:
+          offset = int(offset)
+        pagesize = request.args.get('pagesize')
+        if pagesize is None:
+          pagesize = 100
+        else:
+          pagesize = int(pagesize)
+
         return appObj.getPaginatedResult(
-          appObj.eboEndpointManager.loadedEBOs,
+          datastore.queryList(objectTypeName, None, None, pagesize, offset),
           outputEBO,
           request,
           filterEBO
         )
-    pass
-    
+
+    @namespace.route('/<string:key>')
+    @namespace.response(400, 'EBO not found')
+    @namespace.param('key', 'EBO key')
+    class job(Resource):
+      '''Show a EBO'''
+      @namespace.doc('get_EBO')
+      @namespace.marshal_with(self.EBOModel)
+      def get(self, key):
+        '''Fetch a given EBO'''
+        try:
+          retVal = datastore.query(objectTypeName, key)
+          return retVal
+        except:
+          raise BadRequest('Invalid EBO key')
+        return None
+
+      @namespace.doc('delete_ebo')
+      @namespace.response(200, 'EBO deleted')
+      @namespace.response(400, 'EBO not found')
+      def delete(self, key):
+        '''Delete EBO'''
+        deletedEBO = dict()
+        deletedEBO['ABC'] = '123'
+        #deletedEBO = None
+        try:
+          #deletedEBO = appObj.appData['jobsData'].getJobByName(guid)
+          raise Exception('Delete not implemented')
+          pass
+        except:
+          raise BadRequest('Invalid EBO key')
+        ##appObj.appData['jobsData'].deleteJob(deletedJob)
+        return deletedJob
+
+      @namespace.doc('upsert_ebo')
+      @namespace.expect(self.EBOModel, validate=True)
+      @namespace.response(200, 'EBO Upserted')
+      @namespace.response(400, 'Validation Error')
+      @appObj.flastRestPlusAPIObject.marshal_with(self.EBOModel, code=200, description='EBO upserted')
+      def put(self, key):
+        '''Upsert EBO'''
+        retData = datastore.upsert(objectTypeName, key, request.get_json())
+        return retData
+
+
   def unload(self):
     raise Exception('Not Implemented')

@@ -42,6 +42,9 @@ class datastoreClass():
   def query(self, objectTypeName, objKey):
     raise self.datastoreNotOveriddenException
 
+  def queryList(self, objectTypeName, filterString, sortString, pagesize, offset):
+    raise self.datastoreNotOveriddenException
+
   #Granular updates not required by dockPond so not implemented
 
   #Complex queries not implemented in dockPond other ways to access the datastore should be used

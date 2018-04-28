@@ -4,6 +4,8 @@ from baseapp_for_restapi_backend_with_swagger import readFromEnviroment, getInva
 import types
 import json
 
+from sortedcontainers import SortedDict
+
 #https://datastax.github.io/python-driver/getting_started.html
 
 
@@ -83,6 +85,7 @@ class datastoreClass(datastore.datastoreClass):
     # print(cql)
     session.execute(cql, (objKey, json.dumps(objData)))
     session.shutdown()
+    return objData
 
   def query(self, objectTypeName, objKey, session=None):
     sessionCreated = False
@@ -104,6 +107,33 @@ class datastoreClass(datastore.datastoreClass):
     if sessionCreated:
       session.shutdown()
     return retVal
+
+  #Cassandra dosen't support offset queries (https://docs.datastax.com/en/developer/java-driver/4.0-alpha/manual/core/paging/)
+  # they are being elmulated here
+  # queryList service won't be a good idea for querying large datasets
+  def queryList(self, objectTypeName, filterString, sortString, pagesize, offset):
+    if filterString is not None:
+      raise Exception('Cassnadra filtering not yet implemented')
+    if sortString is not None:
+      raise Exception('Cassnadra sorting not implemented')
+    session = self.cluster.connect()
+    cql = 'select * from ' + self.keyspace() + '.' + objectTypeName
+    rows = session.execute(cql)
+    if rows.has_more_pages:
+      raise Exception('Cassandra multi page queries not yet implmented')
+    c = 0
+    numberOfRowsWeMustFetch = offset + pagesize
+    ## print('Cassandra needs to return ' + str(numberOfRowsWeMustFetch) + ' rows')
+    retVal = SortedDict()
+    for curRow in rows:
+      c = c + 1
+      if c > numberOfRowsWeMustFetch:
+        #don't bother fetching any more rows we have rnough
+        break
+      retVal[c] = json.loads(curRow.jsonstr)
+    session.shutdown()
+    return retVal
+
 
   def delete(self, objectTypeName, objKey):
     session = self.cluster.connect()
