@@ -34,4 +34,9 @@ class eboEndpointManagerClass():
         newEBO.setupAPI()
         self.loadedEBOs[newEBO.eboName] = newEBO #appended to list whatever state is
 
+  def getInfo(self):
+    Obj = dict()
+    Obj['NumberLoaded'] = len(self.loadedEBOs.keys())
+    Obj['NumberNotOK'] = 0 #TODO Implmenet
+    return Obj
 

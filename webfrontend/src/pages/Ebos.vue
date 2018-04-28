@@ -1,5 +1,6 @@
 <template>
   <div>
+    TODO - Layout this page
     <q-table
       title='Jobs'
       :data="jobData"
@@ -19,11 +20,6 @@
       </template>
 
       <template slot="top-left" slot-scope="props">
-        <q-btn
-          color="primary"
-          push
-          @click="openCreateJobModalDialog"
-        >Create Job</q-btn>
       </template>
       <template slot="top-right" slot-scope="props">
       <q-table-columns
@@ -43,10 +39,6 @@
       </q-td>
 
     </q-table>
-    <CreateJobModal
-      ref="createJobModalDialog"
-      v-model="createJobModalDialog"
-    />
   </div>
 
 </template>
@@ -55,15 +47,11 @@
 import { Notify, Dialog } from 'quasar'
 import globalStore from '../store/globalStore'
 import dataTableSettings from '../store/dataTableSettings'
-import CreateJobModal from '../components/CreateJobModal'
 import callbackHelper from '../callbackHelper'
 import userSettings from '../store/userSettings'
 import restcallutils from '../restcallutils'
 
 export default {
-  components: {
-    CreateJobModal
-  },
   data () {
     return {
       rowsPerPageOptions: [5, 10, 25, 50, 100, 200],

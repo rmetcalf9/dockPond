@@ -10,6 +10,7 @@ from cassandraDatastore import name as cassandraDatastoreName, datastoreClass as
 from appParams import appParamsClass
 from eboEndpointManager import eboEndpointManagerClass
 from mainAPI import registerAPI as registerMainApi
+from serverInfoAPI import registerAPI as registerServerInfoApi
 
 class appObjClass(parAppObj):
   appParams = None
@@ -40,7 +41,8 @@ class appObjClass(parAppObj):
   def initOnce(self):
     super(appObjClass, self).initOnce()
     
-    #Regiest main api
+    #Regiest apis
+    registerServerInfoApi(self)
     registerMainApi(self)
     
 
@@ -62,6 +64,19 @@ class appObjClass(parAppObj):
       'result': fields.List(fields.Nested(recordModel)),
     })
 
+  def getServerInfoModel(self):
+    ebosInfoModel = appObj.flastRestPlusAPIObject.model('EBOs', {
+      'NumberLoaded': fields.Integer(default='0',description='Number EBOs loaded'),
+      'NumberNotOK': fields.Integer(default='0',description='Number EBOs not loaded sucessfully')
+    })
+    
+    return appObj.flastRestPlusAPIObject.model('ServerInfo', {
+      'EBOs': fields.Nested(ebosInfoModel)
+    })
+
+  def getServerInfoJSON(self):
+    return {'EBOs': self.eboEndpointManager.getInfo()}
+    #return json.dumps({'Server': self.serverObj, 'Jobs': jobsObj})
 
 appObj = appObjClass()
 

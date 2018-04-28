@@ -16,7 +16,7 @@
 
         <q-toolbar-title>
           {{ pageTitle }}
-          <span slot="subtitle">dockJob - Scheduled Job Runner by RJM</span>
+          <span slot="subtitle">dockPond - EBO Datastore by RJM</span>
         </q-toolbar-title>
       </q-toolbar>
     </q-layout-header>
@@ -29,9 +29,9 @@
           <q-item-side icon="home" />
           <q-item-main label="Dashboard" sublabel="" />
         </q-item>
-        <q-item to="/jobs">
+        <q-item to="/ebos">
           <q-item-side icon="rowing" />
-          <q-item-main label="Jobs" sublabel="" />
+          <q-item-main label="EBOS" sublabel="" />
         </q-item>
         <hr v-if="loginRequiredByServer">
         <q-item to="/logout" v-if="loginRequiredByServer">
@@ -49,7 +49,7 @@
         <table width="100%"><tr>
         <td>
           <a v-if="! (connectionData.apidocsurl === '_')" v-bind:href="connectionData.apidocsurl" target="_blank">APIdocs</a>
-          <a href="https://github.com/rmetcalf9/dockJob" target="_blank">GitHub</a>
+          <a href="https://github.com/rmetcalf9/dockPond" target="_blank">GitHub</a>
         </td>
         <td align="right">Version: {{connectionData.version}}</td>
         </tr></table>
