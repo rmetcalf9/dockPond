@@ -1,22 +1,19 @@
 <template>
   <div>
-    TODO - Layout this page
     <q-table
-      title='Jobs'
-      :data="jobData"
-      :columns="jobTableColumns"
-      :visible-columns="jobsDataTableSettings.visibleColumns"
-      :filter="jobsDataTableSettings.filter"
+      title='Ebos'
+      :data="eboData"
+      :columns="eboTableColumns"
+      :visible-columns="ebosDataTableSettings.visibleColumns"
+      :filter="ebosDataTableSettings.filter"
       row-key="name"
-      :pagination.sync="jobsDataTableSettings.serverPagination"
+      :pagination.sync="ebosDataTableSettings.serverPagination"
       :loading="loading"
       @request="request"
-      selection="single"
-      :selected.sync="selectedSecond"
+      selection="none"
       :rows-per-page-options="rowsPerPageOptions"
     >
       <template slot="top-selection" slot-scope="props">
-        <q-btn flat round delete icon="delete" @click="deleteJob" />
       </template>
 
       <template slot="top-left" slot-scope="props">
@@ -25,17 +22,14 @@
       <q-table-columns
         color="secondary"
         class="q-mr-sm"
-        v-model="jobsDataTableSettings.visibleColumns"
-        :columns="jobTableColumns"
+        v-model="ebosDataTableSettings.visibleColumns"
+        :columns="eboTableColumns"
       />
-      <q-search clearable hide-underline v-model="jobsDataTableSettings.filter" />
+      <!--<q-search clearable hide-underline v-model="ebosDataTableSettings.filter" />-->
       </template>
 
-      <q-td slot="body-cell-..." slot-scope="props" :props="props">
-        <q-btn flat color="primary" icon="keyboard_arrow_right" label="" @click="$router.push('/jobs/' + props.row.guid)" />
-      </q-td>
-      <q-td slot="body-cell-command" slot-scope="props" :props="props">
-        <div v-for="curVal in getLineArray(props.value)" :key=curVal.p>{{ curVal.v }}</div>
+      <q-td slot="body-cell-apidocs" slot-scope="props" :props="props">
+        <div v-if="props.row.state === 'OK' ">{{ props.apidocurl }}</div>
       </q-td>
 
     </q-table>
@@ -44,11 +38,10 @@
 </template>
 
 <script>
-import { Notify, Dialog } from 'quasar'
+import { Notify } from 'quasar'
 import globalStore from '../store/globalStore'
 import dataTableSettings from '../store/dataTableSettings'
 import callbackHelper from '../callbackHelper'
-import userSettings from '../store/userSettings'
 import restcallutils from '../restcallutils'
 
 export default {
@@ -61,23 +54,17 @@ export default {
         return str.split('\n').map(function (v) { return { p: ++c, v: v } })
       },
       createJobModalDialog: {},
-      jobTableColumns: [
-        // { name: 'guid', required: false, label: 'GUID', align: 'left', field: 'guid', sortable: false, filter: true },
-        { name: 'name', required: true, label: 'Job Name', align: 'left', field: 'name', sortable: true, filter: true },
-        { name: 'enabled', required: false, label: 'Scheduled Running Enabled', align: 'left', field: 'enabled', sortable: true, filter: true },
-        { name: 'creationDate', required: false, label: 'Created', align: 'left', field: 'creationDateString', sortable: true, filter: true },
-        { name: 'lastRunDate', required: false, label: 'Last Run', align: 'left', field: 'lastRunDateString', sortable: true, filter: true },
-        { name: 'lastRunReturnCode', required: false, label: 'Last Run Return Code', align: 'left', field: 'lastRunReturnCode', sortable: true, filter: true },
-        { name: 'lastRunExecutionGUID', required: false, label: 'Last Execution GUID', align: 'left', field: 'lastRunExecutionGUID', sortable: true, filter: true },
-        { name: 'repetitionInterval', required: false, label: 'Repetition', align: 'left', field: 'repetitionInterval', sortable: true, filter: true },
-        { name: 'nextScheduledRun', required: false, label: 'Next Run', align: 'left', field: 'nextScheduledRunString', sortable: true, filter: true },
-        { name: 'command', required: false, label: 'Command', align: 'left', field: 'command', sortable: true, filter: true },
-        { name: 'lastUpdateDate', required: false, label: 'Last Update', align: 'left', field: 'lastUpdateDateString', sortable: true, filter: true },
-        { name: '...', required: true, label: '', align: 'left', field: 'guid', sortable: false, filter: false }
+      eboTableColumns: [
+        { name: 'name', required: true, label: 'EBO Name', align: 'left', field: 'name', sortable: false, filter: false },
+        { name: 'sourceFileTag', required: false, label: 'Source File Tag', align: 'left', field: 'sourceFileTag', sortable: false, filter: false },
+        { name: 'loadedAPITag', required: false, label: 'Loaded API Tag', align: 'left', field: 'loadedAPITag', sortable: false, filter: false },
+        { name: 'state', required: false, label: 'State', align: 'left', field: 'state', sortable: false, filter: false },
+        { name: 'stateMeaning', required: false, label: 'State Meaning', align: 'left', field: 'stateMeaning', sortable: false, filter: false },
+        { name: 'errorStateReason', required: false, label: 'Error', align: 'left', field: 'errorStateReason', sortable: false, filter: false },
+        { name: 'apidocs', required: false, label: 'API Documentation', align: 'left', field: 'apidocs', sortable: false, filter: false }
       ],
-      jobData: [],
-      loading: false,
-      selectedSecond: []
+      eboData: [],
+      loading: false
     }
   },
   methods: {
@@ -90,23 +77,16 @@ export default {
           TTT.loading = false
 
           // updating pagination to reflect in the UI
-          TTT.jobsDataTableSettings.serverPagination = pagination
+          TTT.ebosDataTableSettings.serverPagination = pagination
           // we also set (or update) rowsNumber
-          TTT.jobsDataTableSettings.serverPagination.rowsNumber = response.data.pagination.total
-          TTT.jobsDataTableSettings.serverPagination.filter = filter
-          TTT.jobsDataTableSettings.serverPagination.rowsPerPage = response.data.pagination.pagesize
+          TTT.ebosDataTableSettings.serverPagination.rowsNumber = response.data.pagination.total
+          TTT.ebosDataTableSettings.serverPagination.filter = filter
+          TTT.ebosDataTableSettings.serverPagination.rowsPerPage = response.data.pagination.pagesize
 
-          dataTableSettings.commit('JOBS', TTT.jobsDataTableSettings)
+          dataTableSettings.commit('EBOS', TTT.ebosDataTableSettings)
 
           // then we update the rows with the fetched ones
-          TTT.jobData = response.data.result
-          TTT.jobData.map(function (obj) {
-            obj.creationDateString = userSettings.getters.userTimeStringFN(obj.creationDate)
-            obj.nextScheduledRunString = userSettings.getters.userTimeStringFN(obj.nextScheduledRun)
-            obj.lastUpdateDateString = userSettings.getters.userTimeStringFN(obj.lastUpdateDate)
-            obj.lastRunDateString = userSettings.getters.userTimeStringFN(obj.lastRunDate)
-            return obj
-          })
+          TTT.eboData = response.data.result
 
           // finally we tell QTable to exit the "loading" state
           TTT.loading = false
@@ -137,63 +117,24 @@ export default {
         queryParams['sort'] = pagination.sortBy + postfix
       }
 
-      var queryString = restcallutils.buildQueryString('jobs/', queryParams)
+      var queryString = restcallutils.buildQueryString('EBOs/', queryParams)
       // console.log(queryString)
       globalStore.getters.apiFN('GET', queryString, undefined, callback)
-    },
-    openCreateJobModalDialog () {
-      var child = this.$refs.createJobModalDialog
-      var TTTT = this
-      child.openCreateJobDialog(function (newJob) {
-        var newJobName = newJob.name
-        TTTT.jobsDataTableSettings.filter = newJobName
-        dataTableSettings.commit('JOBS', TTTT.jobsDataTableSettings)
-        TTTT.request({
-          pagination: TTTT.jobsDataTableSettings.serverPagination, // Rows number will be overwritten when query returns
-          filter: TTTT.jobsDataTableSettings.filter
-        })
-      })
-    },
-    deleteJob () {
-      var TTT = this
-      Dialog.create({
-        title: 'Confirm',
-        message: 'Delete ' + this.selectedSecond[0].name,
-        ok: 'Confirm',
-        cancel: 'Cancel'
-      }).then(() => {
-        var callback = {
-          ok: function (response) {
-            // console.log(response.data.name)
-            TTT.selectedSecond = []
-            TTT.request({
-              pagination: TTT.jobsDataTableSettings.serverPagination,
-              filter: TTT.jobsDataTableSettings.filter
-            })
-            Notify.create('Job "' + response.data.name + '" Deleted')
-          },
-          error: function (error) {
-            TTT.loading = false
-            Notify.create('Job delete failed - ' + callbackHelper.getErrorFromResponse(error))
-          }
-        }
-        globalStore.getters.apiFN('DELETE', 'jobs/' + this.selectedSecond[0].guid, undefined, callback)
-      })
     }
   },
   computed: {
     datastoreState () {
       return globalStore.getters.datastoreState
     },
-    jobsDataTableSettings () {
-      return dataTableSettings.getters.Jobs
+    ebosDataTableSettings () {
+      return dataTableSettings.getters.Ebos
     }
   },
   mounted () {
     // once mounted, we need to trigger the initial server data fetch
     this.request({
-      pagination: this.jobsDataTableSettings.serverPagination,
-      filter: this.jobsDataTableSettings.filter
+      pagination: this.ebosDataTableSettings.serverPagination,
+      filter: this.ebosDataTableSettings.filter
     })
   }
 }

@@ -40,7 +40,7 @@ export default [
     children: [
       { path: '', redirect: '/dashboard' },
       { path: 'dashboard', component: () => import('pages/Dashboard'), beforeEnter (to, from, next) { dashboardBeforeNav(to, from, next, 'Dashboard') } },
-      { path: 'ebos', component: () => import('pages/Ebos'), beforeEnter (to, from, next) { defaultBeforeNavFn(to, from, next, 'Jobs') } }
+      { path: 'ebos', component: () => import('pages/Ebos'), beforeEnter (to, from, next) { defaultBeforeNavFn(to, from, next, 'EBOs') } }
     ]
   },
   { path: '/login', component: () => import('pages/Login') }, // Can't redirect to common preload or we will get endless loop

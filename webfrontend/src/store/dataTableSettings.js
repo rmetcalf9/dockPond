@@ -3,19 +3,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 const state = {
-  jobs: {
-    visibleColumns: ['name', 'enabled', 'lastRunReturnCode', 'nextScheduledRun'],
-    serverPagination: {
-      page: 1,
-      rowsNumber: 10, // specifying this determines pagination is server-side
-      rowsPerPage: 10,
-      sortBy: null,
-      descending: false
-    },
-    filter: ''
-  },
-  jobExecutions: {
-    visibleColumns: ['executionName', 'stage', 'resultReturnCode'],
+  ebos: {
+    visibleColumns: ['name', 'loadedAPITag', 'state', 'apidocs'],
     serverPagination: {
       page: 1,
       rowsNumber: 10, // specifying this determines pagination is server-side
@@ -28,11 +17,8 @@ const state = {
 }
 
 export const mutations = {
-  JOBS (state, jobs) {
-    state.jobs = jobs
-  },
-  JOBEXECUTIONS (state, jobExecutions) {
-    state.jobExecutions = jobExecutions
+  EBOS (state, ebos) {
+    state.ebos = ebos
   }
 }
 
@@ -40,11 +26,8 @@ export const actions = {
 }
 
 const getters = {
-  Jobs: (state, getters) => {
-    return state.jobs
-  },
-  jobExecutions: (state, getters) => {
-    return state.jobExecutions
+  Ebos: (state, getters) => {
+    return state.ebos
   }
 }
 

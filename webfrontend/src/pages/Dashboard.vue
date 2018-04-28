@@ -7,7 +7,8 @@
       </q-card-title>
       <q-card-main>
         <table>
-          <tr><td align="right">Server Startup Time:</td><td>{{ serverInfo }}</td></tr>
+          <tr><td align="right">Number APIs Loaded:</td><td>{{ serverInfo.EBOs.NumberLoaded }}</td></tr>
+          <tr><td align="right">Number APIs Not OK:</td><td>{{ serverInfo.EBOs.NumberNotOK }}</td></tr>
         </table>
       </q-card-main>
     </q-card>

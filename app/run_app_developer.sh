@@ -9,11 +9,11 @@ APP_DIR=.
 export APIAPP_PORT=3033
 export APIAPP_MODE=DEVELOPER
 export APIAPP_FRONTEND=_
-export APIAPP_APIURL=http://localhost/api
-export APIAPP_APIDOCSURL=http://localhost/apidocs
+export APIAPP_APIURL=http://localhost:3033/api
+export APIAPP_APIDOCSURL=http://localhost:3033/apidocs
 export APIAPP_APIACCESSSECURITY=[]
-export APIAPP_EBOAPIURL=http://localhost/ebos
-export APIAPP_EBOAPIDOCSURL=http://localhost/ebodocs
+export APIAPP_EBOAPIURL=http://localhost:3033/ebos
+export APIAPP_EBOAPIDOCSURL=http://localhost:3033/ebodocs
 
 export APIAPP_ENVIROMENT=DEV
 export APIAPP_CASS_IPLIST="[ 'localhost' ]"

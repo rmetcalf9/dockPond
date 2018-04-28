@@ -30,7 +30,7 @@
           <q-item-main label="Dashboard" sublabel="" />
         </q-item>
         <q-item to="/ebos">
-          <q-item-side icon="rowing" />
+          <q-item-side icon="dvr" />
           <q-item-main label="EBOS" sublabel="" />
         </q-item>
         <hr v-if="loginRequiredByServer">
