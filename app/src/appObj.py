@@ -84,12 +84,15 @@ class appObjClass(parAppObj):
     })
 
   def getServerInfoJSON(self):
+    #For GIT HUB Repo I need to map it
+    #Got  https://api.github.com/repos/rmetcalf9/dockPondSampleEBOs
+    #Want https://github.com/rmetcalf9/dockPond
     return {
       'Instance': {
         'APIAPP_ENVIROMENT': self.appParams.APIAPP_ENVIROMENT,
         'APIAPP_EBOAPIURL': self.appParams.APIAPP_EBOAPIURL,
         'APIAPP_EBOAPIDOCSURL': self.appParams.APIAPP_EBOAPIDOCSURL,
-        'APIAPP_GITHUBREPOLOCATION': self.appParams.APIAPP_GITHUBREPOLOCATION
+        'APIAPP_GITHUBREPOLOCATION': self.appParams.APIAPP_GITHUBREPOLOCATION.replace("https://api.github.com/repos/","https://github.com/")
        },
       'EBOs': self.eboEndpointManager.getInfo()
     }
