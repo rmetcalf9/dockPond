@@ -11,6 +11,9 @@ import time
 class watcherThreadClass(threading.Thread):
   appObj = None
 
+  reloadRequested = False
+  activityLock = threading.Lock()
+
   running = True
   def run(self):
     self.running = True
@@ -29,8 +32,26 @@ class watcherThreadClass(threading.Thread):
     self.appObj = appObj
 
   def loopIteration(self, curDatetime):
-    if self.appObj is None:
-      return #No appObject setup yet to watch
+    try:
+      if self.appObj is None:
+        return #No appObject setup yet to watch
+      if self.reloadRequested:
+        self.activityLock.acquire()
+        self.appObj.reloadAPIsFromGithub()
+        self.activityLock.release()
+    except Exception as e:
+      print("Exception in watcher thread")
+      print(str(e))
+      # We may have activity lock aquired so release it so thread keeps running
+      self.activityLock.release()
     ## print('watcherthread LI')
 
+  def requestReload(self):
+    self.activityLock.acquire()
+    if self.reloadRequested:
+      self.activityLock.release()
+      return ("Already requested", 200)
+    self.reloadRequested = True
+    self.activityLock.release()
+    return ("Requested logged", 200)
 

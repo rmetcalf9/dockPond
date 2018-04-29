@@ -3,6 +3,7 @@ from flask import request
 import datetime
 import pytz
 from eboEndpoint import getEBOModel
+from werkzeug.exceptions import BadRequest
 
 def registerAPI(appObj):
   nsMain = appObj.flastRestPlusAPIObject.namespace('EBOs', description='Information about EBOs loaded')
@@ -31,4 +32,15 @@ def registerAPI(appObj):
         request,
         filterEBO
       )
+
+  @nsMain.route('/requestReload')
+  class APIFunctions(Resource):
+    '''API Admin functions'''
+
+    @nsMain.doc('requestReload')
+    ##@nsMain.marshal_with(appObj.getResultModel(getEBOModel(appObj)))
+    @appObj.flastRestPlusAPIObject.response(200, 'Success')
+    def get(self):
+      '''request Reload of APIs from guthub'''
+      return appObj.watcherThread.requestReload()
 
