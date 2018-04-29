@@ -72,13 +72,27 @@ class appObjClass(parAppObj):
       'NumberLoaded': fields.Integer(default='0',description='Number EBOs loaded'),
       'NumberNotOK': fields.Integer(default='0',description='Number EBOs not loaded sucessfully')
     })
-    
+    instanceInfoModel = getAppObj().flastRestPlusAPIObject.model('Instance', {
+      'APIAPP_ENVIROMENT': fields.String(default='',description='Enviroment for this instance'),
+      'APIAPP_EBOAPIURL': fields.String(default='',description='Base endpoint for EBO apis'),
+      'APIAPP_EBOAPIDOCSURL': fields.String(default='',description='Base endpoint for EBO docs'),
+      'APIAPP_GITHUBREPOLOCATION': fields.String(default='',description='Github location for EBO information')
+    })
     return getAppObj().flastRestPlusAPIObject.model('ServerInfo', {
+      'Instance': fields.Nested(instanceInfoModel),
       'EBOs': fields.Nested(ebosInfoModel)
     })
 
   def getServerInfoJSON(self):
-    return {'EBOs': self.eboEndpointManager.getInfo()}
+    return {
+      'Instance': {
+        'APIAPP_ENVIROMENT': self.appParams.APIAPP_ENVIROMENT,
+        'APIAPP_EBOAPIURL': self.appParams.APIAPP_EBOAPIURL,
+        'APIAPP_EBOAPIDOCSURL': self.appParams.APIAPP_EBOAPIDOCSURL,
+        'APIAPP_GITHUBREPOLOCATION': self.appParams.APIAPP_GITHUBREPOLOCATION
+       },
+      'EBOs': self.eboEndpointManager.getInfo()
+    }
     #return json.dumps({'Server': self.serverObj, 'Jobs': jobsObj})
 
   def reloadAPIsFromGithub(self):
