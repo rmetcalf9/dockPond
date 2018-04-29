@@ -6,6 +6,8 @@ import threading
 import datetime
 import pytz
 import time
+import traceback
+import sys
 
 
 class watcherThreadClass(threading.Thread):
@@ -42,7 +44,8 @@ class watcherThreadClass(threading.Thread):
         self.activityLock.release()
     except Exception as e:
       print("Exception in watcher thread")
-      print(str(e))
+      exc_type, exc_value, exc_traceback = sys.exc_info()
+      traceback.print_exception(exc_type, exc_value, exc_traceback,limit=8, file=sys.stdout)
       # We may have activity lock aquired so release it so thread keeps running
       self.activityLock.release()
     ## print('watcherthread LI')

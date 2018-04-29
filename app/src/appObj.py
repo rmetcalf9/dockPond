@@ -82,7 +82,7 @@ class appObjClass(parAppObj):
     #return json.dumps({'Server': self.serverObj, 'Jobs': jobsObj})
 
   def reloadAPIsFromGithub(self):
-    raise Exception('Not Implemented')
+    self.eboEndpointManager.scanGitandLoadEBOs()
 
 _appObj = None
 def getAppObj():

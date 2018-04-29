@@ -20,7 +20,8 @@ class eboEndpointManagerClass():
     print("Found " + str(len(gitEBOs)) + " EBOs")
     
     #Mark vanished
-    for loadedEBO in self.loadedEBOs:
+    for loadedEBOKey in self.loadedEBOs:
+      loadedEBO = self.loadedEBOs[loadedEBOKey]
       if not loadedEBO.eboName in gitEBOs:
         loadedEBO.markVanished()
     
