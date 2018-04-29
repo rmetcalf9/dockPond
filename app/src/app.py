@@ -1,4 +1,4 @@
-from appObj import appObj
+from appObj import getAppObj
 
 import sys
 import os
@@ -12,11 +12,11 @@ import os
 ## /ebos/AnimalsV1/
 ## /ebodocs/AnimalsV1/
 
-appObj.init(os.environ)
+getAppObj().init(os.environ)
 
 expectedNumberOfParams = 0
 if ((len(sys.argv)-1) != expectedNumberOfParams):
   raise Exception('Wrong number of paramaters passed (Got ' + str((len(sys.argv)-1)) + " expected " + str(expectedNumberOfParams) + ")")
 
-appObj.run()
+getAppObj().run()
 

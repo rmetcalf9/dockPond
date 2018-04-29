@@ -65,12 +65,12 @@ class appObjClass(parAppObj):
     })
 
   def getServerInfoModel(self):
-    ebosInfoModel = appObj.flastRestPlusAPIObject.model('EBOs', {
+    ebosInfoModel = getAppObj().flastRestPlusAPIObject.model('EBOs', {
       'NumberLoaded': fields.Integer(default='0',description='Number EBOs loaded'),
       'NumberNotOK': fields.Integer(default='0',description='Number EBOs not loaded sucessfully')
     })
     
-    return appObj.flastRestPlusAPIObject.model('ServerInfo', {
+    return getAppObj().flastRestPlusAPIObject.model('ServerInfo', {
       'EBOs': fields.Nested(ebosInfoModel)
     })
 
@@ -78,5 +78,11 @@ class appObjClass(parAppObj):
     return {'EBOs': self.eboEndpointManager.getInfo()}
     #return json.dumps({'Server': self.serverObj, 'Jobs': jobsObj})
 
-appObj = appObjClass()
+_appObj = None
+def getAppObj():
+  global _appObj
+  if _appObj is None:
+    _appObj = appObjClass()
+  return _appObj
+
 

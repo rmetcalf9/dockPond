@@ -1,6 +1,5 @@
 #tests for appObj
 from TestHelperSuperClass import testHelperAPIClient
-from appObj import appObj, appObjClass
 import pytz
 import datetime
 import json

@@ -3,7 +3,7 @@
 # https://docs.python.org/3/library/unittest.html
 import unittest
 import json
-from appObj import appObj
+from appObj import getAppObj
 
 import datetime
 import pytz
@@ -72,8 +72,8 @@ class testHelperAPIClient(testHelperSuperClass):
 
   #moved to a manual call so I can inject and stop call to hithub api
   def setUpMAN(self):
-    appObj.init(env, testingMode = True)
-    self.testClient = appObj.flaskAppObject.test_client()
+    getAppObj().init(env, testingMode = True)
+    self.testClient = getAppObj().flaskAppObject.test_client()
     self.testClient.testing = True 
   def tearDown(self):
     self.testClient = None

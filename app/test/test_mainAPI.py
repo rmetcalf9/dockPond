@@ -24,8 +24,10 @@ class test_mainAPI(testHelperAPIClient):
     numMatched = 0
     for expIdx, expVal in enumerate(resultJSON['result']):
       for idx, val in enumerate(matchedARR):
-        if self.areJSONStringsEqual(val,expVal):
-          matchedARR[idx] = '_'
+        print(val['name'])
+        print(expVal['name'])
+        if val['name'] == expVal['name']:
+          matchedARR[idx] = {"name": "_"}
           numMatched = numMatched + 1
     self.assertEqual(len(matchedARR),numMatched,msg='Didn\'t match all results')
     
