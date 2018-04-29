@@ -19,8 +19,9 @@ class appObjClass(parAppObj):
   
   testingMode = False
 
-  def init(self, env, testingMode = False):
-    super(appObjClass, self).init(env)
+  def init(self, env, watcherThread, testingMode = False):
+    self.watcherThread = watcherThread
+    super(appObjClass, self).init(env)  #init Once is called as part of super
     self.testingMode = testingMode #Causes APIs to only register if they are not already registered
     
     self.appParams = appParamsClass(env)
@@ -37,6 +38,8 @@ class appObjClass(parAppObj):
 
     self.eboEndpointManager = eboEndpointManagerClass(self)
     self.eboEndpointManager.scanGitandLoadEBOs()
+
+    self.watcherThread.setAppObjToWatch(self)
 
   def initOnce(self):
     super(appObjClass, self).initOnce()
