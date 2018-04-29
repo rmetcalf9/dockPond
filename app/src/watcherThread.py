@@ -37,6 +37,7 @@ class watcherThreadClass(threading.Thread):
         return #No appObject setup yet to watch
       if self.reloadRequested:
         self.activityLock.acquire()
+        self.reloadRequested = False
         self.appObj.reloadAPIsFromGithub()
         self.activityLock.release()
     except Exception as e:
