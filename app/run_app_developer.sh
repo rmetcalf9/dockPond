@@ -16,11 +16,11 @@ export APIAPP_APIDOCSURL=http://${LOCAL_EXTERNHOST}/apidocs
 export APIAPP_APIACCESSSECURITY=[]
 export APIAPP_EBOAPIURL=http://${LOCAL_EXTERNHOST}/ebos
 export APIAPP_EBOAPIDOCSURL=http://${LOCAL_EXTERNHOST}/ebodocs
-export APIAPP_ENVIROMENT DEV
-export APIAPP_CASS_IPLIST "[ 'localhost' ]"
-export APIAPP_CASS_PORT "9042"
-export APIAPP_CASS_REPLICATION "{ 'class': 'SimpleStrategy', 'replication_factor': '1' }"
-export APIAPP_GITHUBREPOLOCATION "https://api.github.com/repos/rmetcalf9/dockPondSampleEBOs"
+export APIAPP_ENVIROMENT=DEV
+export APIAPP_CASS_IPLIST="[ 'localhost' ]"
+export APIAPP_CASS_PORT="9042"
+export APIAPP_CASS_REPLICATION="{ 'class': 'SimpleStrategy', 'replication_factor': '1' }"
+export APIAPP_GITHUBREPOLOCATION="https://api.github.com/repos/rmetcalf9/dockPondSampleEBOs"
 
 export APIAPP_VERSION=
 if [ -f ${APP_DIR}/../VERSION ]; then
