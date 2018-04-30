@@ -10,7 +10,7 @@ RUN apk add --no-cache bash python3 curl && \
     pip3 install --upgrade pip
 
 ENV APP_DIR /app
-ENVt APIAPP_PORT 80
+ENV APIAPP_PORT 80
 ENV APIAPP_FRONTEND /webfrontend
 ENV APIAPP_APIURL http://localhost:80/api
 ENV APIAPP_APIDOCSURL http://localhost:80/apidocs
