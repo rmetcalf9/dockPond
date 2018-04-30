@@ -30,9 +30,13 @@ class apiEndpointClass():
 
   def __init__(self, eboEndpoint):
     self.eboEndpoint = eboEndpoint
-    
+
+
     self.docAPILocation = '/ebodocs/' + self.eboEndpoint.eboName + '/'
     self.APILocation = '/ebos/' + self.eboEndpoint.eboName
+
+    self.eboEndpoint.appObj.registerRedirectCorrection('/ebos/' + self.eboEndpoint.eboName, self.eboEndpoint.appObj.appParams.APIAPP_EBOAPIURL + '/' + self.eboEndpoint.eboName)
+    self.eboEndpoint.appObj.registerRedirectCorrection('/ebodocs/' + self.eboEndpoint.eboName, self.eboEndpoint.appObj.appParams.APIAPP_EBOAPIDOCSURL + '/' + self.eboEndpoint.eboName)
     
     #print('Registering EBO docs: ' + self.docAPILocation )
     api_blueprint = Blueprint('eboapi' + self.eboEndpoint.eboName, __name__)
@@ -44,14 +48,10 @@ class apiEndpointClass():
       doc=self.docAPILocation,
       default_mediatype='application/json'
     )
-    
     caculatedUserEndpointURL = self.eboEndpoint.appObj.appParams.APIAPP_EBOAPIURL + '/' + self.eboEndpoint.eboName
     caculatedAPIDocsPath = self.eboEndpoint.appObj.appParams.getEBODOCSPath() + '/' + self.eboEndpoint.eboName
     caculatedAPIPath = self.eboEndpoint.appObj.appParams.getEBOPath() + '/' + self.eboEndpoint.eboName
-    #print("1. EndpointURL: " + caculatedUserEndpointURL)
-    #print("2. APIDocsPath: " + caculatedAPIDocsPath)
-    #print("3. APIPath: " + caculatedAPIPath)
-      
+
     self.flastRestPlusAPIObject.setExtraParams(
       caculatedUserEndpointURL, 
       caculatedAPIDocsPath, 
@@ -75,7 +75,7 @@ class apiEndpointClass():
 
     self.eboEndpoint.appObj.datastore.initObjectType(self.eboEndpoint.eboName)
     self._registerAPI(self.eboEndpoint.appObj)
-    
+
     #print("*********DEBUG RULE START*************")
     #for rule in self.eboEndpoint.appObj.flaskAppObject.url_map.iter_rules():
     #  print(rule)

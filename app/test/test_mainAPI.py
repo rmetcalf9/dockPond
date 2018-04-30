@@ -34,4 +34,16 @@ class test_mainAPI(testHelperAPIClient):
   #Swagger files tested in appObj
 
 
+  @patch('githubAPICalls.githubAPICallsClass.getEBOList', return_value=[ 'AnimalsV1', 'BandsV1', 'TownsV1' ])
+  def test_ebodocs_redirect_bad_URLs(self, getEBOListCall):
+    self.setUpMAN()
+    result = self.testClient.get('/ebodocs/AnimalsV1')
+    self.assertEqual(result.status_code, 301)
+    self.assertEqual(result.headers['location'], 'http://localhost:3033/ebodocs/AnimalsV1/')
+
+    #/ebos/ is never registered so will never redirect badly
+    #result = self.testClient.get('/ebos/AnimalsV1')
+    #self.assertEqual(result.status_code, 301)
+    #self.assertEqual(result.headers['location'], 'http://localhost:3033/ebos/AnimalsV1/')
+
 
