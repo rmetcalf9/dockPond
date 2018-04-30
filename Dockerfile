@@ -10,10 +10,19 @@ RUN apk add --no-cache bash python3 curl && \
     pip3 install --upgrade pip
 
 ENV APP_DIR /app
+ENVt APIAPP_PORT 80
 ENV APIAPP_FRONTEND /webfrontend
-ENV APIAPP_APIURL http://localhost:80/dockpondapi
+ENV APIAPP_APIURL http://localhost:80/api
 ENV APIAPP_APIDOCSURL http://localhost:80/apidocs
 ENV APIAPP_APIACCESSSECURITY '[]'
+ENV APIAPP_EBOAPIURL http://localhost:80/ebos
+ENV APIAPP_EBOAPIDOCSURL http://localhost:80/ebodocs
+
+ENV APIAPP_ENVIROMENT DEV
+ENV APIAPP_CASS_IPLIST "[ 'cassandra-1', 'cassandra-2', 'cassandra-3' ]"
+ENV APIAPP_CASS_PORT "9042"
+ENV APIAPP_CASS_REPLICATION "{ 'class': 'SimpleStrategy', 'replication_factor': '3' }"
+ENV APIAPP_GITHUBREPOLOCATION "https://api.github.com/repos/rmetcalf9/dockPondSampleEBOs"
 
 
 # APIAPP_MODE is not definable here as it is hardcoded to DOCKER in the shell script

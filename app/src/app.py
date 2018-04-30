@@ -16,15 +16,16 @@ import watcherThread
 watcherThread = watcherThread.watcherThreadClass()
 watcherThread.start()
 
-getAppObj().init(os.environ, watcherThread)
+try:
+  getAppObj().init(os.environ, watcherThread)
 
-expectedNumberOfParams = 0
-if ((len(sys.argv)-1) != expectedNumberOfParams):
-  raise Exception('Wrong number of paramaters passed (Got ' + str((len(sys.argv)-1)) + " expected " + str(expectedNumberOfParams) + ")")
+  expectedNumberOfParams = 0
+  if ((len(sys.argv)-1) != expectedNumberOfParams):
+    raise Exception('Wrong number of paramaters passed (Got ' + str((len(sys.argv)-1)) + " expected " + str(expectedNumberOfParams) + ")")
 
-getAppObj().run()
-
-watcherThread.stopThreadRunning()
-watcherThread.join()
+  getAppObj().run()
+finally:
+  watcherThread.stopThreadRunning()
+  watcherThread.join()
 
 
