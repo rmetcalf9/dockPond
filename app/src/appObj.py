@@ -39,7 +39,8 @@ class appObjClass(parAppObj):
     self.eboEndpointManager = eboEndpointManagerClass(self)
     self.eboEndpointManager.scanGitandLoadEBOs()
 
-    self.watcherThread.setAppObjToWatch(self)
+    if self.watcherThread is not None:
+      self.watcherThread.setAppObjToWatch(self)
 
   def initOnce(self):
     super(appObjClass, self).initOnce()

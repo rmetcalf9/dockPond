@@ -72,7 +72,7 @@ class testHelperAPIClient(testHelperSuperClass):
 
   #moved to a manual call so I can inject and stop call to hithub api
   def setUpMAN(self):
-    getAppObj().init(env, testingMode = True)
+    getAppObj().init(env, watcherThread = None, testingMode = True)
     self.testClient = getAppObj().flaskAppObject.test_client()
     self.testClient.testing = True 
   def tearDown(self):

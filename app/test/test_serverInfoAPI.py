@@ -16,6 +16,12 @@ class test_api(testHelperAPIClient):
   def test_getServerInfo(self, getEBOListCall):
     self.setUpMAN()
     expRes = {
+      'Instance': {
+        'APIAPP_EBOAPIDOCSURL': 'http://localhost:3033/ebodocs',
+        'APIAPP_EBOAPIURL': 'http://localhost:3033/ebos',
+        'APIAPP_ENVIROMENT': 'DEV_INT_TEST',
+        "APIAPP_GITHUBREPOLOCATION": 'https://github.com/rmetcalf9/dockPondSampleEBOs'
+      },
       'EBOs': {
         'NumberLoaded': 3,
         'NumberNotOK': 0
