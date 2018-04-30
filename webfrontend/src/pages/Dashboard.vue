@@ -8,7 +8,14 @@
       <q-card-main>
         <table>
           <tr><td align="right">Instance Name:</td><td>{{ serverInfo.Instance.APIAPP_ENVIROMENT }}</td></tr>
-          <tr><td align="right">Github EBO Repo:</td><td><a v-bind:href="serverInfo.Instance.APIAPP_GITHUBREPOLOCATION" target="_blank">{{ serverInfo.Instance.APIAPP_GITHUBREPOLOCATION }}</a></td></tr>
+          <tr><td align="right">Github EBO Repo:</td><td>
+            <a v-bind:href="serverInfo.Instance.APIAPP_GITHUBREPOLOCATION" target="_blank">{{ serverInfo.Instance.APIAPP_GITHUBREPOLOCATION }}</a>
+            <q-btn
+              color="primary"
+              push
+              @click="refreshScanGit"
+            >Rescan</q-btn>
+          </td></tr>
           <tr><td align="right">EBO API Endpoint:</td><td>{{ serverInfo.Instance.APIAPP_EBOAPIURL }}</td></tr>
           <tr><td align="right">EBO Documentation Endpoint:</td><td>{{ serverInfo.Instance.APIAPP_EBOAPIDOCSURL }}</td></tr>
         </table>
@@ -31,6 +38,8 @@
 
 <script>
 import globalStore from '../store/globalStore'
+import callbackHelper from '../callbackHelper'
+import { Notify } from 'quasar'
 
 export default {
   data () {
@@ -38,6 +47,17 @@ export default {
     }
   },
   methods: {
+    refreshScanGit () {
+      var callback = {
+        ok: function (response) {
+          Notify.create({ type: 'positive', detail: response.data })
+        },
+        error: function (error) {
+          Notify.create('Query failed - ' + callbackHelper.getErrorFromResponse(error))
+        }
+      }
+      globalStore.getters.apiFN('GET', 'EBOs/requestReload', undefined, callback)
+    }
   },
   computed: {
     serverInfo () {
