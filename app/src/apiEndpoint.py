@@ -13,6 +13,8 @@ from werkzeug.exceptions import BadRequest
 
 from flask_restplus import fields
 
+eboKeyNotFoundMessage = 'EBO Key not found'
+
 def getGetModelFunctionFromPythonFile(pythonFile):
   ldict = locals()
   exec(pythonFile, None,ldict)
@@ -117,7 +119,7 @@ class apiEndpointClass():
         )
 
     @namespace.route('/<string:key>')
-    @namespace.response(400, 'EBO not found')
+    @namespace.response(400, eboKeyNotFoundMessage)
     @namespace.param('key', 'EBO key')
     class job(Resource):
       '''Show a EBO'''
@@ -129,12 +131,12 @@ class apiEndpointClass():
           retVal = datastore.query(objectTypeName, key)
           return retVal
         except:
-          raise BadRequest('Invalid EBO key')
+          raise BadRequest(eboKeyNotFoundMessage)
         return None
 
       @namespace.doc('delete_ebo')
       @namespace.response(200, 'EBO deleted')
-      @namespace.response(400, 'EBO not found')
+      @namespace.response(400, eboKeyNotFoundMessage)
       def delete(self, key):
         '''Delete EBO'''
         deletedEBO = dict()
@@ -145,7 +147,7 @@ class apiEndpointClass():
           raise Exception('Delete not implemented')
           pass
         except:
-          raise BadRequest('Invalid EBO key')
+          raise BadRequest(eboKeyNotFoundMessage)
         ##appObj.appData['jobsData'].deleteJob(deletedJob)
         return deletedJob
 
