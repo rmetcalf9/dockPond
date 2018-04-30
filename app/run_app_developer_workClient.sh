@@ -6,7 +6,7 @@
 
 APP_DIR=.
 
-LOCAL_EXTERNHOST=localhost:3033
+LOCAL_EXTERNHOST=somefunnyhostname.com:5033
 
 export APIAPP_PORT=3033
 export APIAPP_MODE=DEVELOPER
