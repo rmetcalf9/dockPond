@@ -68,6 +68,18 @@ services:
     ports:
     - "7000"
 
-
-
+  dockpond_dev:
+    image: metcarob/dockpond:0.0.5
+    ports:
+      - 80:80
+    environment:
+      - APIAPP_APIURL=http://somefunnyhostname.com:5080/api
+      - APIAPP_APIDOCSURL=http://somefunnyhostname.com:5080/apidocs/
+      #- APIAPP_CASS_IPLIST="['cassandra-1','cassandra-2','cassandra-3']" Default
+      #- eAPIAPP_CASS_REPLICATION="{'class':'SimpleStrategy','replication_factor':'3'}" Default
+      - APIAPP_EBOAPIURL=http://somefunnyhostname.com:5080/ebos
+      - APIAPP_EBOAPIDOCSURL=http://somefunnyhostname.com:5080/ebodocs
+    deploy:
+      restart_policy:
+        condition: any
 
