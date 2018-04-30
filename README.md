@@ -10,6 +10,21 @@ TODO
 
 # Getting started - Running DockPond to check it out...
 
+Quick start:
+````
+docker network create test_dockpond_net
+docker run --name cassandraDB --network test_dockpond_net -d -p 7000:7000 -p 9042:9042 cassandra:3
+
+** Wait a bit for cassandra to start **
+
+docker run --name dockPond --network test_dockpond_net -d -p 80:80 -e APIAPP_APIURL='http://localhost:80/api' -e'APIAPP_APIDOCSURL=http://localhost:80/apidocs' -eAPIAPP_CASS_IPLIST="[ 'cassandraDB' ]" -eAPIAPP_CASS_REPLICATION="{'class':'SimpleStrategy','replication_factor':'1'}" -eAPIAPP_EBOAPIURL=http://localhost:80/ebos -eAPIAPP_EBOAPIDOCSURL=http://localhost:80/ebodocs metcarob/dockpond
+
+
+TMP VER
+
+docker run --name dockPond --network test_dockpond_net -d -p 80:80 -e APIAPP_APIURL='http://somefunnyhostname.com:5080/api' -e'APIAPP_APIDOCSURL=http://somefunnyhostname.com:5080/apidocs' -eAPIAPP_CASS_IPLIST="[ 'cassandraDB' ]" -eAPIAPP_CASS_REPLICATION="{'class':'SimpleStrategy','replication_factor':'1'}" -eAPIAPP_EBOAPIURL=http://somefunnyhostname.com:5080/ebos -eAPIAPP_EBOAPIDOCSURL=http://somefunnyhostname.com:5080/ebodocs metcarob/dockpond
+````
+
 TODO
 
 # Contributing
