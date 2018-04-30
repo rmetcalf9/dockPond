@@ -49,14 +49,16 @@ class apiEndpointClass():
       default_mediatype='application/json'
     )
     caculatedUserEndpointURL = self.eboEndpoint.appObj.appParams.APIAPP_EBOAPIURL + '/' + self.eboEndpoint.eboName
-    caculatedAPIDocsPath = self.eboEndpoint.appObj.appParams.getEBODOCSPath() + '/' + self.eboEndpoint.eboName
+    caculatedAPIDocsPath = self.eboEndpoint.appObj.appParams.APIAPP_EBOAPIDOCSURL + '/' + self.eboEndpoint.eboName
     caculatedAPIPath = self.eboEndpoint.appObj.appParams.getEBOPath() + '/' + self.eboEndpoint.eboName
 
     self.flastRestPlusAPIObject.setExtraParams(
-      caculatedUserEndpointURL, 
       caculatedAPIDocsPath, 
+      caculatedUserEndpointURL, 
       self.eboEndpoint.appObj.appParams.overrideEBODOCSPath, 
-      caculatedAPIPath
+      caculatedAPIPath,
+      internal_apidoc_prefix='/ebodocs/' + self.eboEndpoint.eboName,
+      internal_api_prefix='/ebos/' + self.eboEndpoint.eboName
     )
     self.flastRestPlusAPIObject.init_app(api_blueprint) 
     

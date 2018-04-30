@@ -46,4 +46,12 @@ class test_mainAPI(testHelperAPIClient):
     #self.assertEqual(result.status_code, 301)
     #self.assertEqual(result.headers['location'], 'http://localhost:3033/ebos/AnimalsV1/')
 
+  @patch('githubAPICalls.githubAPICallsClass.getEBOList', return_value=[ 'AnimalsV1', 'BandsV1', 'TownsV1' ])
+  def test_animalindexpointsToCorrectSwagger(self, getEBOListCall):
+    self.setUpMAN()
+    result = self.testClient.get('/ebodocs/AnimalsV1/')
+    self.assertEqual(result.status_code, 200, msg='index missing from /ebodocs/AnimalsV1/ not present')
+    idx_file = result.get_data(as_text=True)
+    print(idx_file)
+    self.assertNotEqual(idx_file.find('http://localhost:3033/ebodocs/AnimalsV1/swagger.json'),-1,msg='Could not find correct url for swagger.json in /ebodocs/AnimalsV1/')
 
