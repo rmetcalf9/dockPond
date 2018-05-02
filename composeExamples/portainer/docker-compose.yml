@@ -119,6 +119,23 @@ services:
     #ports:
     #  - 80:80
     environment:
+      #- APIAPP_ENVIROMENT=DEV Default
+      - APIAPP_APIURL=http://somefunnyhostname.com:5080/dev/dockpond/api
+      - APIAPP_APIDOCSURL=http://somefunnyhostname.com:5080/dev/dockpond/apidocs
+      #- APIAPP_CASS_IPLIST="['cassandra-1','cassandra-2','cassandra-3']" Default
+      #- APIAPP_CASS_REPLICATION="{'class':'SimpleStrategy','replication_factor':'3'}" Default
+      - APIAPP_EBOAPIURL=http://somefunnyhostname.com:5080/dev/dockpond/ebos
+      - APIAPP_EBOAPIDOCSURL=http://somefunnyhostname.com:5080/dev/dockpond/ebodocs
+    deploy:
+      restart_policy:
+        condition: any
+
+  dockpond_test:
+    image: metcarob/dockpond:0.0.8
+    #ports:
+    #  - 80:80
+    environment:
+      - APIAPP_ENVIROMENT=TEST
       - APIAPP_APIURL=http://somefunnyhostname.com:5080/dev/dockpond/api
       - APIAPP_APIDOCSURL=http://somefunnyhostname.com:5080/dev/dockpond/apidocs
       #- APIAPP_CASS_IPLIST="['cassandra-1','cassandra-2','cassandra-3']" Default
@@ -167,8 +184,38 @@ services:
                      --data 'name=dockpondebos_dev' \
                      --data 'uris=/dev/dockpond/ebos' \
                      --data 'upstream_url=http://dockpond_dev:80/ebos' \
-                     --data 'https_only=false')\
-               \""
+                     --data 'https_only=false') && \
+                   (curl -i -X POST \
+                     --url http://kong:8001/apis/ \
+                     --data 'name=dockpondapi_test' \
+                     --data 'uris=/test/dockpond/api' \
+                     --data 'upstream_url=http://dockpond_test:80/api' \
+                     --data 'https_only=false') && \
+                   (curl -i -X POST \
+                     --url http://kong:8001/apis/ \
+                     --data 'name=dockpondapidocs_test' \
+                     --data 'uris=/test/dockpond/apidocs' \
+                     --data 'upstream_url=http://dockpond_test:80/apidocs' \
+                     --data 'https_only=false') && \
+                   (curl -i -X POST \
+                     --url http://kong:8001/apis/ \
+                     --data 'name=dockpond_test' \
+                     --data 'uris=/test/dockpond/frontend' \
+                     --data 'upstream_url=http://dockpond_test:80/frontend' \
+                     --data 'https_only=false') && \
+                   (curl -i -X POST \
+                     --url http://kong:8001/apis/ \
+                     --data 'name=dockpondebodocs_test' \
+                     --data 'uris=/test/dockpond/ebodocs' \
+                     --data 'upstream_url=http://dockpond_test:80/ebodocs' \
+                     --data 'https_only=false') && \
+                   (curl -i -X POST \
+                     --url http://kong:8001/apis/ \
+                     --data 'name=dockpondebos_test' \
+                     --data 'uris=/test/dockpond/ebos' \
+                     --data 'upstream_url=http://dockpond_test:80/ebos' \
+                     --data 'https_only=false')
+                 \""
 
 ##The next section starts a UI for kong called konga. 
 ##We only need a ui for development experimentation and can be removed if no UI is required
