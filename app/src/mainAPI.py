@@ -11,7 +11,7 @@ def registerAPI(appObj):
   class EBOsList(Resource):
     '''Lists loaded EBOs'''
 
-    @nsMain.doc('getjobs')
+    @nsMain.doc('getEBOs')
     @nsMain.marshal_with(appObj.getResultModel(getEBOModel(appObj)))
     @appObj.flastRestPlusAPIObject.response(200, 'Success')
     @appObj.addStandardSortParams(nsMain)
