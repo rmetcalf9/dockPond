@@ -129,7 +129,7 @@ class eboEndpointClass():
     self._scanGIT(noDepState='Not deployed in this Instance', finishLoadState='Require Model Load')
 
   def updateScanGIT(self):
-    self._scanGIT(noDepState='Vanished', finishLoadState='Require Model Update')
+    self._scanGIT(noDepState='Not deployed in this Instance', finishLoadState='Require Model Update')
 
   def _setupAPI(self):
     try:
