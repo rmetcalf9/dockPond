@@ -17,10 +17,6 @@ module.exports = function (ctx) {
       // 'fontawesome'
     ],
     supportIE: false,
-    vendor: {
-      add: [],
-      remove: []
-    },
     build: {
       scopeHoisting: true,
       //vueRouterMode: 'history',
