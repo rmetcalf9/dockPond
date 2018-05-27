@@ -50,18 +50,6 @@ class appObjClass(parAppObj):
     registerServerInfoApi(self)
     registerMainApi(self)
 
-    @self.flaskAppObject.after_request
-    def after_request(response):
-      if (self.globalParamObject.getDeveloperMode()):
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-      return response
-    print("*********DEBUG RULE START*************")
-    for rule in self.flaskAppObject.url_map.iter_rules():
-      print(rule)
-    print("*********DEBUG RULE END*************")
-    
   #override exit gracefully to stop worker thread
   def exit_gracefully(self, signum, frame):
     super(appObjClass, self).exit_gracefully(signum, frame)

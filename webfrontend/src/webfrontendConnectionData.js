@@ -42,6 +42,7 @@ function tryLocation (locationList, callback) {
           console.log(basicAuthData)
           console.log(workLoginConnectionData)
         }
+        console.log('WARNING - falling back to default connection data')
         callback.ok({data: devBoxData})
       }
     }
@@ -55,7 +56,9 @@ function getData (callback) {
     'http://somefunnyhostname.com:5080/frontend/webfrontendConnectionData',
     'http://somefunnyhostname.com:5033/frontend/webfrontendConnectionData',
     'http://localhost:80/frontend/webfrontendConnectionData',
-    'http://localhost:3033/frontend/webfrontendConnectionData'
+    'http://localhost:3033/frontend/webfrontendConnectionData',
+    'http://localhost:8090/frontend/webfrontendConnectionData',
+    'http://localhost:3090/frontend/webfrontendConnectionData'
   ]
   tryLocation(locationsToTry.reverse(), callback)
 }

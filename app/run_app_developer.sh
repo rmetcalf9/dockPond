@@ -6,9 +6,9 @@
 
 APP_DIR=.
 
-LOCAL_EXTERNHOST=localhost:3033
+LOCAL_EXTERNHOST=localhost:3090
 
-export APIAPP_PORT=3033
+export APIAPP_PORT=8090
 export APIAPP_MODE=DEVELOPER
 export APIAPP_FRONTEND=_
 export APIAPP_APIURL=http://${LOCAL_EXTERNHOST}/api
@@ -17,7 +17,7 @@ export APIAPP_APIACCESSSECURITY=[]
 export APIAPP_EBOAPIURL=http://${LOCAL_EXTERNHOST}/ebos
 export APIAPP_EBOAPIDOCSURL=http://${LOCAL_EXTERNHOST}/ebodocs
 export APIAPP_ENVIROMENT=DEV
-export APIAPP_CASS_IPLIST="[ 'localhost' ]"
+export APIAPP_CASS_IPLIST="[ 'cassandraDB' ]"
 export APIAPP_CASS_PORT="9042"
 export APIAPP_CASS_REPLICATION="{ 'class': 'SimpleStrategy', 'replication_factor': '1' }"
 export APIAPP_GITHUBREPOLOCATION="https://api.github.com/repos/rmetcalf9/dockPondSampleEBOs"

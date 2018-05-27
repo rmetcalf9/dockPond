@@ -1,7 +1,8 @@
-from TestHelperSuperClass import testHelperAPIClient
+from TestHelperSuperClass import testHelperAPIClient, env
 import unittest
 import json
 from unittest.mock import patch, call
+from appObj import getAppObj
 
 data_simpleJobCreateParams = {
   "name": "TestJob",
@@ -31,7 +32,21 @@ class test_api(testHelperAPIClient):
     self.assertEqual(result.status_code, 200)
     resultJSON = json.loads(result.get_data(as_text=True))
     self.assertJSONStringsEqual(resultJSON, expRes)
+    
 
 
-
+  @patch('githubAPICalls.githubAPICallsClass.getEBOList', return_value=[ 'AnimalsV1', 'BandsV1', 'TownsV1' ])
+  def test_devModeOptionsCorrectHeaderResponse(self, getEBOListCall):
+    
+    alteredEnv = dict(env)
+    alteredEnv['APIAPP_MODE']='DEVELOPER'
+    
+    getAppObj().init(alteredEnv, watcherThread = None, testingMode = True)
+    self.testClient = getAppObj().flaskAppObject.test_client()
+    self.testClient.testing = True 
+    result = self.testClient.options('/api/serverinfo/')
+    foundHeaders = dict()
+    for header in result.headers:
+      self.assertFalse(header[0] in foundHeaders,msg='Found duplicate header in options response - ' + header[0])
+      foundHeaders[header[0]] = header[1]
 
