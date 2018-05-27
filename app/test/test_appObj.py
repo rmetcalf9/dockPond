@@ -5,6 +5,8 @@ import datetime
 import json
 from unittest.mock import patch, call
 
+model_str = "from flask_restplus import fields\n\ndef getModel(flaskRestPlusAPI):\n  return flaskRestPlusAPI.model('Animal', {\n      'name': fields.String(default='',description='What is the name of this animal? (Must be unique)')\n  })"
+
 class test_appObjClass(testHelperAPIClient):
 #Actual tests below
 
@@ -14,8 +16,15 @@ class test_appObjClass(testHelperAPIClient):
     self.setUpMAN()
 
   @patch('githubAPICalls.githubAPICallsClass.getEBOList', return_value=[ 'AnimalsV1', 'GenderV1' ])
-  def test_SwaggerFilesPresent(self, getEBOListCall):
+  @patch('githubAPICalls.githubAPICallsClass.getEBOInfoFileFromGit', return_value='{"Deployments": {"DEV_INT_TEST": "0.0.1"}}')
+  @patch('githubAPICalls.githubAPICallsClass.getPythonModelFileFromGit', return_value=model_str)
+  def test_SwaggerFilesPresent(self, getEBOListCall, getEBOInfoFileFromGitCall, getPythonModelFileFromGitCall):
     self.setUpMAN()
+    result = self.testClient.get('/api/EBOs/')
+    self.assertEqual(result.status_code, 200)
+    resultJSON = json.loads(result.get_data(as_text=True))
+    print(resultJSON)
+
     #Tests all locations for swagger files
     result = self.testClient.get('/api/swagger.json')
     self.assertEqual(result.status_code, 200, msg='/apis/swagger.json for api not present')
@@ -31,7 +40,9 @@ class test_appObjClass(testHelperAPIClient):
     self.assertEqual(result.status_code, 200, msg='/ebodocs/AnimalsV1/swagger.json for Animals apidocs not present')
 
   @patch('githubAPICalls.githubAPICallsClass.getEBOList', return_value=[ 'AnimalsV1', 'GenderV1' ])
-  def test_docsIndexesPresent(self, getEBOListCall):
+  @patch('githubAPICalls.githubAPICallsClass.getEBOInfoFileFromGit', return_value='{"Deployments": {"DEV_INT_TEST": "0.0.1"}}')
+  @patch('githubAPICalls.githubAPICallsClass.getPythonModelFileFromGit', return_value=model_str)
+  def test_docsIndexesPresent(self, getEBOListCall, getEBOInfoFileFromGitCall, getPythonModelFileFromGitCall):
     self.setUpMAN()
     #Tests all locations for swagger files
     result = self.testClient.get('/apidocs/')

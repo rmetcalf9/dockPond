@@ -22,7 +22,7 @@ env = {
   'APIAPP_EBOAPIDOCSURL': 'http://localhost:3033/ebodocs',
   'APIAPP_ENVIROMENT': 'DEV_INT_TEST',
   'APIAPP_CASS_PORT': '9042',
-  'APIAPP_CASS_IPLIST': '[ "localhost"]',
+  'APIAPP_CASS_IPLIST': '[ "cassandraDB"]',
   'APIAPP_CASS_REPLICATION': '{ \'class\': \'SimpleStrategy\', \'replication_factor\': \'1\' }',
   'APIAPP_GITHUBREPOLOCATION': 'https://api.github.com/repos/rmetcalf9/dockPondSampleEBOs'
 }
