@@ -1,5 +1,5 @@
 #tests for appObj
-from TestHelperSuperClass import testHelperSuperClass
+from TestHelperSuperClass import testHelperSuperClass, env
 from cassandraDatastore import datastoreClass as cassandraDatastoreClass
 import pytz
 import datetime
@@ -8,10 +8,9 @@ from baseapp_for_restapi_backend_with_swagger import getInvalidEnvVarParamaterEx
 from cassandra.cluster import Cluster
 
 # These tests test against a local deployed cassandra instance
-
 workingenv = {
-  'APIAPP_CASS_PORT': '9042',
-  'APIAPP_CASS_IPLIST': '[ "localhost"]',
+  'APIAPP_CASS_PORT': env["APIAPP_CASS_PORT"],
+  'APIAPP_CASS_IPLIST': env["APIAPP_CASS_IPLIST"],
   'APIAPP_CASS_REPLICATION': "{ 'class': 'SimpleStrategy', 'replication_factor': '1' }"
 }
 
