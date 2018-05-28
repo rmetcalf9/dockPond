@@ -11,6 +11,8 @@ test('Start state is INITIAL', () => {
   expect(gsState.datastoreState).toBe('INITIAL');
 });
 
+const asyncTimeout = 10000
+
 // For this test to pass done must be called
 //  see https://facebook.github.io/jest/docs/en/asynchronous.html
 test('Start init Action', done => {
@@ -22,10 +24,12 @@ test('Start init Action', done => {
       done()
     },
     error: function (response) {
+      console.log('ERROR response handler in start init action test - should not get here')
+      console.log(response)
     }
   }
   store.actions.init({commit: commonUtils.getCommitFN(gsState, store.mutations), state: gsState}, {callback: callback})
-});
+}, asyncTimeout);
 test('Setting connection data with no loginmodes changes state to LOGGED_IN', () => {
   var gsState = store.getInitialState()
   store.mutations.SET_CONNECTIONDATA(gsState, {'version': 'TEST','apiurl': 'https://test','apiaccesssecurity': []})
