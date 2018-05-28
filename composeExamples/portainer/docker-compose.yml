@@ -120,12 +120,12 @@ services:
     #  - 80:80
     environment:
       #- APIAPP_ENVIROMENT=DEV Default
-      - APIAPP_APIURL=${EXTURL}:5080/dev/dockpond/api
-      - APIAPP_APIDOCSURL=${EXTURL}:5080/dev/dockpond/apidocs
+      - APIAPP_APIURL=${EXTURL}:${EXTPORT}/dev/dockpond/api
+      - APIAPP_APIDOCSURL=${EXTURL}:${EXTPORT}/dev/dockpond/apidocs
       #- APIAPP_CASS_IPLIST="['cassandra-1','cassandra-2','cassandra-3']" Default
       #- APIAPP_CASS_REPLICATION="{'class':'SimpleStrategy','replication_factor':'3'}" Default
-      - APIAPP_EBOAPIURL=${EXTURL}:5080/dev/dockpond/ebos
-      - APIAPP_EBOAPIDOCSURL=${EXTURL}:5080/dev/dockpond/ebodocs
+      - APIAPP_EBOAPIURL=${EXTURL}:${EXTPORT}/dev/dockpond/ebos
+      - APIAPP_EBOAPIDOCSURL=${EXTURL}:${EXTPORT}/dev/dockpond/ebodocs
     deploy:
       restart_policy:
         condition: any
@@ -136,12 +136,12 @@ services:
     #  - 80:80
     environment:
       - APIAPP_ENVIROMENT=TEST
-      - APIAPP_APIURL=${EXTURL}:5080/test/dockpond/api
-      - APIAPP_APIDOCSURL=${EXTURL}:5080/test/dockpond/apidocs
+      - APIAPP_APIURL=${EXTURL}:${EXTPORT}/test/dockpond/api
+      - APIAPP_APIDOCSURL=${EXTURL}:${EXTPORT}/test/dockpond/apidocs
       #- APIAPP_CASS_IPLIST="['cassandra-1','cassandra-2','cassandra-3']" Default
       #- APIAPP_CASS_REPLICATION="{'class':'SimpleStrategy','replication_factor':'3'}" Default
-      - APIAPP_EBOAPIURL=${EXTURL}:5080/test/dockpond/ebos
-      - APIAPP_EBOAPIDOCSURL=${EXTURL}:5080/test/dockpond/ebodocs
+      - APIAPP_EBOAPIURL=${EXTURL}:${EXTPORT}/test/dockpond/ebos
+      - APIAPP_EBOAPIDOCSURL=${EXTURL}:${EXTPORT}/test/dockpond/ebodocs
     deploy:
       restart_policy:
         condition: any
