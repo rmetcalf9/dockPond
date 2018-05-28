@@ -115,7 +115,7 @@ services:
       retries: 10
 
   dockpond_dev:
-    image: metcarob/dockpond:0.0.8
+    image: metcarob/dockpond:0.0.9
     #ports:
     #  - 80:80
     environment:
